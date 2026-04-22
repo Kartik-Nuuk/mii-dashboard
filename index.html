@@ -615,6 +615,7 @@
     <button class="btn primary" id="saveBtn" onclick="saveEdits()" style="display:none;">💾 Save</button>
     <button class="btn" id="cancelBtn" onclick="cancelEdits()" style="display:none;">↺ Cancel</button>
     <span id="editBadge" style="display:none; font-size: 11px; color: var(--accent); font-weight: 600;">EDIT MODE — click any highlighted field to modify</span>
+    <button class="btn" id="exportBtn" onclick="exportHTML()" title="Download updated HTML to push live">⬇️ Download</button>
     <button class="btn" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
     <button class="btn" onclick="toggleSopPanel()">SOP Library</button>
   </div>
@@ -855,6 +856,7 @@ const SOPS = [
    5 direct reports under MII Lead, clean hierarchy.
    Each role has Input (Lagging) + Output (Leading) KPIs — unique & balanced.
    ========================= */
+/* DATA:ROLE_KPIS:START */
 let ROLE_KPIS = {
   'MII Lead': {
     leading: [ // Input — controllable levers the MII Lead pulls
@@ -969,8 +971,11 @@ let ROLE_KPIS = {
     ]
   },
 };
+/* DATA:ROLE_KPIS:END */
 
+/* DATA:CUSTOM_ROLES:START */
 let CUSTOM_ROLES = [];
+/* DATA:CUSTOM_ROLES:END */
 let currentOrgView = 'current';
 let ORG = {
   current: {
@@ -1141,6 +1146,7 @@ function setOrgView(view) {
    PROCESS FLOW — 6 phases (gates G0–G5)
    No "Function Head" — always "MII Lead"
    ========================= */
+/* DATA:PHASES:START */
 let PHASES = [
   {
     gate: 'G0', name: 'Strategy & Onboarding', dur: 'Week 0–4',
@@ -1469,6 +1475,7 @@ let PHASES = [
     ]
   }
 ];
+/* DATA:PHASES:END */
 
 function sopChipsHTML(ids) {
   if (!ids || !ids.length) return '';
@@ -1927,6 +1934,50 @@ function applyCoverFields(fields) {
     if (el) el.innerHTML = val;
   });
 }
+function exportHTML() {
+  const btn = document.getElementById('exportBtn');
+  btn.textContent = '⏳ Exporting…';
+  btn.disabled = true;
+  setTimeout(() => {
+    try {
+      // 1. Capture current DOM (cover page edits are already live in the DOM)
+      let html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+      // 2. Bake in current ROLE_KPIS
+      html = html.replace(
+        /\/\* DATA:ROLE_KPIS:START \*\/[\s\S]*?\/\* DATA:ROLE_KPIS:END \*\//,
+        '/* DATA:ROLE_KPIS:START */\nlet ROLE_KPIS = ' + JSON.stringify(ROLE_KPIS, null, 2) + ';\n/* DATA:ROLE_KPIS:END */'
+      );
+
+      // 3. Bake in current PHASES
+      html = html.replace(
+        /\/\* DATA:PHASES:START \*\/[\s\S]*?\/\* DATA:PHASES:END \*\//,
+        '/* DATA:PHASES:START */\nlet PHASES = ' + JSON.stringify(PHASES, null, 2) + ';\n/* DATA:PHASES:END */'
+      );
+
+      // 4. Bake in current CUSTOM_ROLES
+      html = html.replace(
+        /\/\* DATA:CUSTOM_ROLES:START \*\/[\s\S]*?\/\* DATA:CUSTOM_ROLES:END \*\//,
+        '/* DATA:CUSTOM_ROLES:START */\nlet CUSTOM_ROLES = ' + JSON.stringify(CUSTOM_ROLES) + ';\n/* DATA:CUSTOM_ROLES:END */'
+      );
+
+      // 5. Download
+      const blob = new Blob([html], { type: 'text/html; charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'MII_Process_Flow.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    } catch(e) {
+      alert('Export failed: ' + e.message);
+    }
+    btn.textContent = '⬇️ Download';
+    btn.disabled = false;
+  }, 50);
+}
+
 function hydrateFromStorage() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
