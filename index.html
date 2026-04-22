@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<title>Make in India — Dashboard</title>
+<style>
+  :root[data-theme="light"] {
+    --bg: #f6f7fb;
+    --panel: #ffffff;
+    --panel-2: #eef1f7;
+    --border: #dce1ec;
+    --border-strong: #8a96b0;
+    --text: #1a1f2b;
+    --muted: #5b6477;
+    --accent: #2563eb;
+    --accent-2: #0ea371;
+    --warn: #c17a07;
+    --danger: #c0392b;
+    --chip: #eef2fa;
+    --shadow: 0 6px 20px rgba(20, 28, 50, 0.08);
+    --role: #dbe5ff;
+    --role-bd: #7aa0f5;
+    --role-tx: #1a3fa8;
+    --fn: #d4f1e2;
+    --fn-bd: #4fba86;
+    --fn-tx: #0a6b3f;
+    --sop: #ecdff7;
+    --sop-bd: #a786d2;
+    --sop-tx: #5e2aa0;
+    --tl: #2563eb;
+    --card-grad: linear-gradient(135deg, #ffffff 0%, #f4f7fd 100%);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-2: #1f2430;
+    --border: #2a3040;
+    --border-strong: #4e576b;
+    --text: #e6e8ee;
+    --muted: #8a93a6;
+    --accent: #4ea1ff;
+    --accent-2: #7cf0c0;
+    --warn: #ffb454;
+    --danger: #ff7b72;
+    --chip: #262c3b;
+    --shadow: 0 8px 28px rgba(0,0,0,0.45);
+    --role: #1b2a42;
+    --role-bd: #26406a;
+    --role-tx: #b5d2ff;
+    --fn: #1e2f24;
+    --fn-bd: #2d5c3f;
+    --fn-tx: #8be0ad;
+    --sop: #2a2236;
+    --sop-bd: #4b3570;
+    --sop-tx: #d5b5ff;
+    --tl: #4ea1ff;
+    --card-grad: linear-gradient(135deg, #171a21 0%, #1b2130 100%);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; height:100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; }
+  header {
+    position: sticky; top: 0; z-index: 30;
+    padding: 12px 22px; border-bottom: 1px solid var(--border);
+    background: var(--panel);
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  header .title h1 { font-size: 17px; margin: 0; letter-spacing: 0.2px; }
+  header .title .sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .controls { display:flex; gap: 8px; align-items:center; flex-wrap: wrap; }
+  .btn {
+    background: var(--panel-2); color: var(--text); border: 1px solid var(--border);
+    padding: 7px 12px; border-radius: 8px; cursor: pointer; font-size: 12px;
+    transition: all .15s ease;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .search {
+    background: var(--panel); color: var(--text); border: 1px solid var(--border);
+    padding: 7px 12px; border-radius: 8px; font-size: 12px; width: 240px;
+  }
+  .search:focus { outline: none; border-color: var(--accent); }
+
+  /* TABS */
+  .tabs { display:flex; gap: 4px; padding: 8px 22px 0; border-bottom: 1px solid var(--border); background: var(--panel); position: sticky; top: 58px; z-index: 25; flex-wrap: wrap; }
+  .tab {
+    padding: 10px 16px; cursor: pointer; font-size: 13px; font-weight: 500;
+    color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px;
+    border-radius: 6px 6px 0 0; transition: all .15s;
+  }
+  .tab:hover { color: var(--text); background: var(--panel-2); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--panel-2); }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+
+  /* =========================================================
+     COVER PAGE
+     ========================================================= */
+  .cover {
+    padding: 30px 40px 60px; height: calc(100vh - 112px); overflow: auto;
+    background:
+      radial-gradient(1000px 500px at 10% 0%, rgba(37,99,235,0.08), transparent 60%),
+      radial-gradient(800px 400px at 100% 100%, rgba(14,163,113,0.08), transparent 60%),
+      var(--bg);
+  }
+  .cover-hero {
+    background: var(--card-grad);
+    border: 1px solid var(--border); border-radius: 18px;
+    padding: 36px 40px; margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    position: relative; overflow: hidden;
+  }
+  .cover-hero::before {
+    content: ''; position: absolute; top: -100px; right: -80px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(37,99,235,0.15), transparent 70%);
+  }
+  .cover-tag {
+    display:inline-block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin-bottom: 10px;
+  }
+  .cover-hero h1 {
+    font-size: 38px; margin: 0 0 8px; font-weight: 800; letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .cover-hero .northstar {
+    font-size: 16px; color: var(--muted); max-width: 700px; line-height: 1.5;
+  }
+  .cover-hero .northstar strong { color: var(--text); }
+
+  .cover-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  @media (max-width: 900px) { .cover-grid { grid-template-columns: 1fr; } }
+
+  .cover-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 24px; box-shadow: var(--shadow);
+  }
+  .cover-card h3 {
+    font-size: 13px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 14px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .cover-card h3 .icon {
+    width: 26px; height: 26px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display:flex; align-items:center; justify-content:center; color: #fff; font-size: 13px;
+  }
+  .cover-card p { font-size: 14px; line-height: 1.6; color: var(--text); margin: 0 0 10px; }
+  .cover-card .sub-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 12px 0 6px; font-weight: 600; }
+
+  .principle-list { list-style: none; padding: 0; margin: 0; }
+  .principle-list li {
+    padding: 10px 0; border-bottom: 1px dashed var(--border);
+    display:flex; gap: 12px; align-items: flex-start; font-size: 13px; line-height: 1.5;
+  }
+  .principle-list li:last-child { border-bottom: none; }
+  .principle-list .num {
+    min-width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-weight: 700; font-size: 11px;
+    display:flex; align-items:center; justify-content:center; flex-shrink: 0;
+  }
+  .principle-list .txt strong { display:block; font-weight: 600; margin-bottom: 2px; }
+  .principle-list .txt span { color: var(--muted); font-size: 12px; }
+
+  .kpi-strip { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 10px; }
+  @media (max-width: 900px) { .kpi-strip { grid-template-columns: repeat(2, 1fr); } }
+  .kpi-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 18px; box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .kpi-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent);
+  }
+  .kpi-card.green::before { background: var(--accent-2); }
+  .kpi-card.amber::before { background: var(--warn); }
+  .kpi-card.red::before { background: var(--danger); }
+  .kpi-card .kc-leg { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; }
+  .kpi-card .kc-metric { font-size: 14px; font-weight: 600; color: var(--text); margin-top: 4px; line-height: 1.3; }
+  .kpi-card .kc-desc { font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+
+  .stat-row { display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px; }
+  @media (max-width: 900px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
+  .stat {
+    padding: 14px 16px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px;
+  }
+  .stat .n { font-size: 24px; font-weight: 700; color: var(--accent); }
+  .stat .l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
+  /* =========================================================
+     ORG CHART — clean hierarchy
+     ========================================================= */
+  .org-wrap { padding: 20px 30px 60px; height: calc(100vh - 112px); overflow: auto; }
+  .org-toggle { display: flex; gap: 8px; margin-bottom: 20px; align-items:center; flex-wrap: wrap; }
+  .org-toggle .mode-btn {
+    padding: 8px 14px; background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; cursor: pointer; font-size: 12px; color: var(--muted); font-weight: 500;
+  }
+  .org-toggle .mode-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .org-legend { margin-left: auto; font-size: 11px; color: var(--muted); display:flex; gap: 14px; align-items:center; flex-wrap: wrap; }
+  .org-legend .sw { display:inline-block; width: 14px; height: 14px; border-radius: 3px; margin-right: 6px; vertical-align: middle; border: 1px solid var(--border); }
+  .sw.cur { background: var(--panel); }
+  .sw.new { background: #fff4d6; border-color: #d4a84b; }
+
+  .org-container { min-width: 1400px; padding: 20px 0; display:flex; flex-direction: column; align-items: center; }
+
+  /* Layer 1 (root) */
+  .org-root { display:flex; justify-content:center; }
+
+  /* Vertical connector from root down to horizontal line above layer 2 */
+  .v-down { width: 2px; height: 30px; background: var(--border-strong); margin: 0 auto; }
+
+  /* Horizontal connector above layer 2 */
+  .h-line-wrap { position: relative; width: 100%; }
+  .h-line { position: absolute; top: 0; left: 10%; right: 10%; height: 2px; background: var(--border-strong); }
+
+  /* Layer 2 — 5 reports, evenly spaced */
+  .org-layer-2 { display:grid; grid-template-columns: repeat(5, 1fr); gap: 16px; padding-top: 30px; width: 100%; position: relative; }
+  .org-layer-2 .col { display:flex; flex-direction: column; align-items: center; position: relative; }
+  .org-layer-2 .col::before {
+    content:''; position:absolute; top: -30px; left: 50%; width: 2px; height: 30px; background: var(--border-strong);
+  }
+
+  /* Layer 3 — children under some layer-2 roles */
+  .l3-wrap { margin-top: 20px; width: 100%; display:flex; justify-content: center; }
+  .l3-connector { width: 2px; height: 20px; background: var(--border-strong); margin: 0 auto; }
+  .l3-h-line { position: absolute; top: 0; height: 2px; background: var(--border-strong); }
+  .l3-children { display:flex; gap: 16px; justify-content: center; padding-top: 20px; position: relative; }
+  .l3-children.single { /* no horizontal bar for single child */ padding-top: 0; }
+  .l3-children.multi::before {
+    content: ''; position: absolute; top: 0; left: 25%; right: 25%; height: 2px; background: var(--border-strong);
+  }
+  .l3-children > .link { position: relative; padding-top: 20px; }
+  .l3-children.multi > .link::before {
+    content: ''; position: absolute; top: 0; left: 50%; width: 2px; height: 20px; background: var(--border-strong);
+  }
+
+  .node {
+    background: var(--panel); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 12px 14px; min-width: 200px; max-width: 240px;
+    box-shadow: var(--shadow); position: relative;
+    transition: all .15s;
+  }
+  .node:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .node.root { min-width: 240px; border-color: var(--accent); border-width: 2px; background: linear-gradient(135deg, rgba(37,99,235,0.05), transparent); }
+  .node.new { background: #fff4d6; border-color: #d4a84b; }
+  :root[data-theme="dark"] .node.new { background: #3a2e14; border-color: #8a6a20; }
+  .node .nm-role { font-size: 12.5px; font-weight: 700; color: var(--text); line-height: 1.3; text-align: center; }
+  .node.root .nm-role { font-size: 14px; color: var(--accent); }
+  .node .nm-person { font-size: 11px; color: var(--muted); margin-top: 4px; text-align: center; }
+  .node .nm-badge {
+    position: absolute; top: -8px; right: -6px; font-size: 9px; font-weight: 700;
+    padding: 2px 7px; border-radius: 999px; background: var(--warn); color: #fff;
+  }
+  .node .nm-kpi-toggle {
+    margin-top: 10px; font-size: 10px; color: var(--accent); cursor: pointer;
+    padding: 5px 8px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 6px;
+    text-align: center; font-weight: 600; letter-spacing: 0.3px; user-select: none;
+  }
+  .node .nm-kpi-toggle:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .node .nm-kpi-box {
+    display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border);
+    text-align: left;
+  }
+  .node.open .nm-kpi-box { display: block; }
+  .node .nm-kpi-box .sect { font-size: 9.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 8px 0 4px; font-weight: 700; }
+  .node .nm-kpi-box .sect:first-child { margin-top: 0; }
+  .node .nm-kpi-box .sect.lead { color: var(--accent-2); }
+  .node .nm-kpi-box .sect.lag { color: var(--warn); }
+  .node .nm-kpi-box ul { margin: 0; padding-left: 14px; font-size: 10.5px; line-height: 1.4; color: var(--text); }
+  .node .nm-kpi-box ul li { margin: 2px 0; }
+
+  /* =========================================================
+     PROCESS FLOW
+     ========================================================= */
+  .viewport {
+    width: 100%; height: calc(100vh - 166px);
+    overflow: hidden; position: relative; cursor: grab;
+    background: var(--bg);
+  }
+  .viewport.grabbing { cursor: grabbing; }
+  .canvas {
+    position: absolute; top: 0; left: 0;
+    transform-origin: 0 0;
+    padding: 30px 40px 60px;
+    min-width: 2800px;
+  }
+
+  /* Larger timeline bar */
+  .timeline-bar {
+    position: relative; height: 92px; margin: 0 0 30px;
+    background: linear-gradient(90deg, rgba(37,99,235,0.1), rgba(14,163,113,0.1));
+    border: 1px solid var(--border); border-radius: 14px;
+    display:flex; align-items: stretch; overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .tl-phase {
+    flex: 1; position: relative; display:flex; flex-direction:column; justify-content:center;
+    padding: 12px 18px 12px 38px; border-right: 1px solid var(--border);
+    cursor: pointer; transition: background .15s;
+  }
+  .tl-phase:last-child { border-right: none; }
+  .tl-phase:hover { background: rgba(37,99,235,0.12); }
+  .tl-phase.active { background: rgba(37,99,235,0.2); }
+  .tl-phase .tl-gate {
+    position: absolute; left: -13px; top: 50%; transform: translateY(-50%);
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--panel); border: 2.5px solid var(--tl);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 11px; font-weight: 700; color: var(--tl); z-index: 2;
+  }
+  .tl-phase .tl-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.25; }
+  .tl-phase .tl-sub { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.3; }
+  .tl-phase .tl-dur {
+    position: absolute; right: 10px; top: 8px; font-size: 10px; color: var(--muted);
+    background: var(--panel); padding: 2px 7px; border-radius: 4px; border: 1px solid var(--border);
+  }
+  .tl-final-gate {
+    position: absolute; right: -13px; top: 50%; transform: translateY(-50%);
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent-2); border: 2.5px solid var(--accent-2); color: #fff;
+    display:flex; align-items:center; justify-content:center; font-size: 12px; font-weight: 700; z-index: 2;
+  }
+
+  .phases-grid { display:flex; gap: 0; align-items: flex-start; }
+  .phase-col {
+    flex: 1; min-width: 340px; padding: 0 12px;
+    border-right: 1px dashed var(--border);
+  }
+  .phase-col:last-child { border-right: none; }
+  .phase-col .phase-head {
+    padding: 6px 0 12px; margin-bottom: 8px;
+    display:flex; align-items: center; gap: 10px;
+    border-bottom: 2px solid var(--tl);
+  }
+  .phase-col .phase-head .pc-gate {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--tl); color: #fff; font-weight: 700; font-size: 12px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .phase-col .phase-head .pc-title { font-size: 13.5px; font-weight: 700; }
+  .phase-col .phase-head .pc-goal { font-size: 10.5px; color: var(--muted); margin-top: 1px; }
+
+  .stage {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    margin-bottom: 10px; box-shadow: var(--shadow); overflow: hidden;
+    transition: border-color .15s ease;
+  }
+  .stage:hover { border-color: var(--accent); }
+  .stage .head {
+    padding: 10px 12px;
+    display:flex; align-items:center; justify-content: space-between; gap: 8px;
+    cursor: pointer; background: var(--panel);
+  }
+  .stage .head:hover { background: var(--panel-2); }
+  .stage .name { font-weight: 600; font-size: 12.5px; line-height: 1.3; }
+  .stage .idx {
+    font-size: 10px; color: var(--muted); border: 1px solid var(--border);
+    padding: 2px 6px; border-radius: 999px; flex-shrink: 0;
+  }
+  .stage .arr { color: var(--muted); font-size: 11px; transition: transform .15s; }
+  .stage.open .arr { transform: rotate(180deg); }
+  .details { display:none; padding: 10px 12px 12px; border-top: 1px dashed var(--border); background: var(--panel-2); }
+  .stage.open .details { display:block; }
+  .details .lbl { font-size: 10px; text-transform: uppercase; color: var(--muted); letter-spacing: 0.5px; margin: 8px 0 4px; font-weight: 600; }
+  .details .lbl:first-child { margin-top: 0; }
+  .summary { font-size: 11.5px; color: var(--text); margin-bottom: 6px; line-height: 1.4; }
+
+  .chips { display:flex; flex-wrap: wrap; gap:4px; }
+  .chip {
+    font-size: 10px; background: var(--chip); color: var(--text);
+    padding: 3px 7px; border-radius: 999px; border: 1px solid var(--border);
+    line-height: 1.3;
+  }
+  .chip.role { background: var(--role); border-color: var(--role-bd); color: var(--role-tx); font-weight: 500; }
+  .chip.fn { background: var(--fn); border-color: var(--fn-bd); color: var(--fn-tx); font-weight: 500; }
+  .chip.sop { background: var(--sop); border-color: var(--sop-bd); color: var(--sop-tx); cursor: pointer; font-weight: 500; }
+  .chip.sop:hover { filter: brightness(0.95); }
+
+  .sub-steps { margin-top: 4px; }
+  .sub-row { padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .sub-row:last-child { border-bottom: none; }
+  .sub-row .st-text { font-size: 11px; color: var(--text); font-weight: 500; }
+  .sub-row .st-meta { font-size: 10px; color: var(--muted); margin-top: 3px; display:flex; gap: 4px; flex-wrap: wrap; }
+
+  .zoom-ui {
+    position: absolute; right: 14px; bottom: 14px; background: var(--panel);
+    border: 1px solid var(--border); border-radius: 10px; padding: 6px; display:flex; gap: 4px;
+    box-shadow: var(--shadow);
+  }
+  .legend {
+    position: absolute; bottom: 14px; left: 14px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 8px 12px; font-size: 11px; color: var(--muted); box-shadow: var(--shadow);
+    display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  }
+  .legend .dot { width:10px; height:10px; border-radius: 50%; display:inline-block; margin-right: 5px; vertical-align: middle; }
+  .dot.role { background: var(--role-bd); } .dot.fn { background: var(--fn-bd); } .dot.sop { background: var(--sop-bd); }
+
+  /* =========================================================
+     KPI TREE — Visual sankey-like diagram
+     ========================================================= */
+  .kpi-wrap { padding: 24px 30px 60px; height: calc(100vh - 112px); overflow: auto; }
+  .kpi-intro {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 20px; margin-bottom: 20px; box-shadow: var(--shadow);
+    display:flex; gap: 20px; align-items: center; flex-wrap: wrap;
+  }
+  .kpi-intro .flow-step {
+    display:flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;
+  }
+  .kpi-intro .flow-step .badge {
+    width: 28px; height: 28px; border-radius: 50%; display:flex; align-items:center; justify-content:center;
+    color: #fff; font-size: 12px; font-weight: 700;
+  }
+  .kpi-intro .flow-arrow { color: var(--muted); font-size: 18px; }
+  .kpi-intro .b1 { background: #8a6a2a; }
+  .kpi-intro .b2 { background: #5e2aa0; }
+  .kpi-intro .b3 { background: #0a6b3f; }
+  .kpi-intro .b4 { background: #1a3fa8; }
+
+  .kpi-cat-section {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    margin-bottom: 18px; box-shadow: var(--shadow); overflow: hidden;
+  }
+  .kpi-cat-head {
+    padding: 14px 20px; background: var(--panel-2);
+    display:flex; align-items: center; gap: 12px; cursor: pointer;
+    border-bottom: 1px solid var(--border);
+  }
+  .kpi-cat-head:hover { background: var(--chip); }
+  .kpi-cat-head .cat-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display:flex; align-items:center; justify-content:center; font-size: 16px; color: #fff; font-weight: 700;
+  }
+  .kpi-cat-head h3 { margin: 0; font-size: 15px; font-weight: 700; }
+  .kpi-cat-head .cat-count { margin-left: auto; font-size: 11px; color: var(--muted); }
+  .kpi-cat-head .cat-arr { color: var(--muted); font-size: 14px; transition: transform .2s; }
+  .kpi-cat-section.open .cat-arr { transform: rotate(180deg); }
+  .kpi-cat-body { display: none; padding: 14px 20px; }
+  .kpi-cat-section.open .kpi-cat-body { display: block; }
+
+  .kpi-flow {
+    display:grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0; align-items: stretch; padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+    position: relative;
+  }
+  .kpi-flow:last-child { border-bottom: none; }
+  .kpi-flow:hover { background: rgba(37,99,235,0.04); }
+  .kpi-cell {
+    padding: 10px 14px; position: relative; font-size: 12px; color: var(--text);
+    display:flex; flex-direction: column; justify-content: center;
+  }
+  .kpi-cell .cell-txt { line-height: 1.4; }
+  .kpi-cell .cell-lbl { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+  .kpi-cell.input { background: rgba(138, 106, 42, 0.08); border-left: 3px solid #8a6a2a; }
+  .kpi-cell.enabler { background: rgba(94, 42, 160, 0.08); border-left: 3px solid #5e2aa0; }
+  .kpi-cell.leading { background: rgba(10, 107, 63, 0.08); border-left: 3px solid #0a6b3f; }
+  .kpi-cell.lagging { background: rgba(26, 63, 168, 0.08); border-left: 3px solid #1a3fa8; }
+  :root[data-theme="dark"] .kpi-cell.input { background: rgba(255, 190, 80, 0.06); }
+  :root[data-theme="dark"] .kpi-cell.enabler { background: rgba(213, 181, 255, 0.06); }
+  :root[data-theme="dark"] .kpi-cell.leading { background: rgba(139, 224, 173, 0.06); }
+  :root[data-theme="dark"] .kpi-cell.lagging { background: rgba(181, 210, 255, 0.06); }
+  .kpi-cell::after {
+    content: '→'; position: absolute; right: -9px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 14px; z-index: 2; background: var(--panel);
+    padding: 0 2px;
+  }
+  .kpi-cell:last-child::after { display: none; }
+
+  .kpi-flow-row { display: flex; flex-direction: column; }
+  .kpi-meta {
+    padding: 6px 14px; display:flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    background: var(--panel); border-top: 1px dashed var(--border);
+  }
+  .kpi-dir-badge {
+    font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 4px;
+  }
+  .kpi-dir-badge.up { background: rgba(14,163,113,0.15); color: var(--accent-2); }
+  .kpi-dir-badge.down { background: rgba(192,57,43,0.15); color: var(--danger); }
+
+  .owner-pill {
+    display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 600;
+  }
+  .owner-pp-lead { background: #dbe5ff; color: #1a3fa8; }
+  .owner-pp-assoc { background: #d4f1e2; color: #0a6b3f; }
+  .owner-p-lead { background: #ecdff7; color: #5e2aa0; }
+  .owner-p-engg { background: #ffe5c8; color: #8a4a00; }
+  .owner-mii { background: #ffd6d6; color: #8a1a1a; }
+  .owner-sc { background: #cff0f0; color: #0a5f6b; }
+  .owner-fin { background: #f0e0cf; color: #7a4b0a; }
+  :root[data-theme="dark"] .owner-pp-lead { background: #1b2a42; color: #b5d2ff; }
+  :root[data-theme="dark"] .owner-pp-assoc { background: #1e2f24; color: #8be0ad; }
+  :root[data-theme="dark"] .owner-p-lead { background: #2a2236; color: #d5b5ff; }
+  :root[data-theme="dark"] .owner-p-engg { background: #3a2a14; color: #ffc890; }
+  :root[data-theme="dark"] .owner-mii { background: #3a1a1a; color: #ff9a9a; }
+  :root[data-theme="dark"] .owner-sc { background: #153a3f; color: #8fdedf; }
+  :root[data-theme="dark"] .owner-fin { background: #3a2c14; color: #e0b98a; }
+
+  .kpi-filter-bar { display:flex; gap: 10px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+  .kpi-filter-bar select, .kpi-filter-bar input {
+    background: var(--panel); color: var(--text); border: 1px solid var(--border);
+    padding: 7px 10px; border-radius: 8px; font-size: 12px;
+  }
+
+  /* =========================================================
+     MODAL + SOP PANEL
+     ========================================================= */
+  .modal-bg {
+    display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 50; align-items:center; justify-content: center; padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .modal-bg.open { display:flex; }
+  .modal {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    max-width: 720px; width: 100%; max-height: 85vh; overflow:auto;
+    box-shadow: var(--shadow);
+  }
+  .modal .m-head {
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    display:flex; justify-content: space-between; align-items:center;
+    position: sticky; top: 0; background: var(--panel);
+  }
+  .modal .m-head h3 { margin: 0; font-size: 15px; }
+  .modal .m-head .close { cursor: pointer; color: var(--muted); font-size: 22px; padding: 0 6px; }
+  .modal .m-body { padding: 18px 20px; font-size: 13px; line-height: 1.55; color: var(--text); }
+  .modal .m-body .placeholder {
+    margin-top: 12px; padding: 14px; background: var(--panel-2); border: 1px dashed var(--border);
+    border-radius: 10px; color: var(--muted); font-size: 12px;
+  }
+  .modal .m-meta { font-size: 11.5px; color: var(--muted); margin-top: 10px; }
+  .modal .m-meta span { color: var(--text); font-weight: 600; }
+
+  .sop-panel {
+    position: fixed; top: 0; right: -440px; width: 420px; height: 100vh;
+    background: var(--panel); border-left: 1px solid var(--border);
+    transition: right .3s ease; z-index: 40; overflow-y: auto;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+  }
+  .sop-panel.open { right: 0; }
+  .sop-panel .sp-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display:flex; justify-content: space-between; align-items:center; position: sticky; top:0; background: var(--panel); z-index: 2; }
+  .sop-panel .sp-head h3 { margin: 0; font-size: 14px; }
+  .sop-panel .sp-body { padding: 10px 14px; }
+  .sop-cat { margin-top: 10px; }
+  .sop-cat h4 { font-size: 11px; letter-spacing: 0.6px; color: var(--muted); text-transform: uppercase; margin: 12px 0 6px; }
+  .sop-item { padding: 8px 10px; margin: 4px 0; background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; font-size: 11.5px; cursor: pointer; display:flex; justify-content: space-between; align-items:center; transition: all .15s; }
+  .sop-item:hover { border-color: var(--accent); }
+  .sop-item .tag { font-size: 10px; color: var(--muted); }
+
+  /* =========================================================
+     EDIT MODE
+     ========================================================= */
+  body.edit-mode .editable {
+    outline: 1px dashed var(--accent);
+    outline-offset: 2px;
+    background: rgba(37, 99, 235, 0.06);
+    border-radius: 3px;
+    cursor: text;
+    padding: 1px 4px;
+  }
+  body.edit-mode .editable:hover { background: rgba(37, 99, 235, 0.12); }
+  body.edit-mode .editable:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    background: rgba(37, 99, 235, 0.14);
+  }
+  :root[data-theme="dark"] body.edit-mode .editable { background: rgba(78,161,255,0.10); }
+  .edit-only { display: none; }
+  body.edit-mode .edit-only { display: inline-flex; }
+  body.edit-mode .hide-in-edit { display: none !important; }
+
+  .row-del-btn {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--muted); font-size: 10px; padding: 1px 6px;
+    border-radius: 4px; cursor: pointer; margin-left: 6px;
+  }
+  .row-del-btn:hover { color: var(--danger); border-color: var(--danger); background: rgba(192,57,43,0.08); }
+
+  .kpi-add-row { margin-top: 6px; }
+  .kpi-add-row input {
+    width: 100%; padding: 4px 8px; font-size: 11.5px;
+    background: var(--panel); color: var(--text);
+    border: 1px dashed var(--accent); border-radius: 4px;
+  }
+  .kpi-add-row input:focus { outline: none; border-style: solid; }
+
+  .role-select {
+    padding: 2px 6px; font-size: 11px;
+    background: var(--panel); color: var(--text);
+    border: 1px solid var(--accent); border-radius: 4px;
+    max-width: 220px;
+  }
+  .role-select:focus { outline: none; }
+
+  body.edit-mode .nm-kpi-box { display: block !important; }
+  body.edit-mode .nm-kpi-toggle { display: none; }
+  body.edit-mode .stage .details { display: block; }
+  body.edit-mode .stage .arr { transform: rotate(180deg); }
+  body.edit-mode .editable:empty::before { content: '(click to edit)'; color: var(--muted); font-style: italic; font-weight: 400; }
+  .tl-phase .editable, .pc-title .editable, .pc-goal .editable, .stage .name .editable, .stage .summary .editable { display: inline; }
+  body.edit-mode .tl-phase { cursor: default; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title">
+    <h1>Make in India — Dashboard</h1>
+    <div class="sub">Cover · Org · Process Flow · KPI Tree</div>
+  </div>
+  <div class="controls">
+    <button class="btn" id="editBtn" onclick="enterEditMode()">✏️ Edit</button>
+    <button class="btn primary" id="saveBtn" onclick="saveEdits()" style="display:none;">💾 Save</button>
+    <button class="btn" id="cancelBtn" onclick="cancelEdits()" style="display:none;">↺ Cancel</button>
+    <span id="editBadge" style="display:none; font-size: 11px; color: var(--accent); font-weight: 600;">EDIT MODE — click any highlighted field to modify</span>
+    <button class="btn" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+    <button class="btn" onclick="toggleSopPanel()">SOP Library</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" data-tab="cover">Cover</div>
+  <div class="tab" data-tab="org">Org Structure</div>
+  <div class="tab" data-tab="flow">Process Flow</div>
+  <div class="tab" data-tab="kpi">KPI Tree</div>
+</div>
+
+<!-- =========================================================
+     TAB 1: COVER PAGE
+     ========================================================= -->
+<div class="tab-panel active" id="tab-cover">
+  <div class="cover">
+    <div class="cover-hero">
+      <div class="cover-tag">Make in India · FY26</div>
+      <h1 class="editable" data-cover-key="hero-h1" spellcheck="false">On-time production at Nuuk quality.</h1>
+      <div class="northstar editable" data-cover-key="northstar" spellcheck="false">
+        Our north star. Every KPI, SOP, lot, and partner decision rolls up to this single sentence.
+        <strong>Quality before cost, cost before speed.</strong>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="n editable" data-cover-key="stat-n-0" spellcheck="false">1 → 3</div><div class="l editable" data-cover-key="stat-l-0" spellcheck="false">MII SKUs (12M plan)</div></div>
+        <div class="stat"><div class="n editable" data-cover-key="stat-n-1" spellcheck="false">3 → 15</div><div class="l editable" data-cover-key="stat-l-1" spellcheck="false">SKD SKUs (12M plan)</div></div>
+        <div class="stat"><div class="n editable" data-cover-key="stat-n-2" spellcheck="false">6</div><div class="l editable" data-cover-key="stat-l-2" spellcheck="false">Partners onboarded</div></div>
+        <div class="stat"><div class="n editable" data-cover-key="stat-n-3" spellcheck="false">&lt; 0</div><div class="l editable" data-cover-key="stat-l-3" spellcheck="false">Target working capital days</div></div>
+      </div>
+    </div>
+
+    <div class="cover-grid">
+      <div class="cover-card">
+        <h3><span class="icon">🎯</span>Mission</h3>
+        <p class="editable" data-cover-key="mission-p-0" spellcheck="false">Deliver Nuuk-quality products from our India manufacturing network at target cost, with <strong>zero disruption to sales or operations</strong> through the BIS transition.</p>
+        <div class="sub-label editable" data-cover-key="mission-sublabel-0" spellcheck="false">Near-term focus (6–12 months)</div>
+        <p class="editable" data-cover-key="mission-p-1" spellcheck="false">Stabilise SKD assembly across current partners · Complete BIS certification for pipeline · Hit China-equivalent NLC.</p>
+      </div>
+      <div class="cover-card">
+        <h3><span class="icon">🔭</span>Vision</h3>
+        <p class="editable" data-cover-key="vision-p-0" spellcheck="false">Build a <strong>cost-advantaged, resilient India manufacturing base</strong> — driving deeper localisation, supply chain optimisation, and negative working capital via supplier credit leverage — while holding the Nuuk quality bar.</p>
+        <div class="sub-label editable" data-cover-key="vision-sublabel-0" spellcheck="false">Long-term (18+ months)</div>
+        <p class="editable" data-cover-key="vision-p-1" spellcheck="false">Deep sub-assembly localisation · DPO > (Inventory + AR days) · SKD → CKD → full MII for flagship SKUs.</p>
+      </div>
+    </div>
+
+    <div class="cover-card" style="margin-bottom: 20px;">
+      <h3><span class="icon">⚖️</span>Guiding Principles</h3>
+      <ol class="principle-list" style="padding: 0;">
+        <li><span class="num">1</span><span class="txt editable" data-cover-key="principle-0" spellcheck="false"><strong>Quality before cost, cost before speed.</strong><span>The China quality bar is the minimum for India. We do not trade quality for cost or speed.</span></span></li>
+        <li><span class="num">2</span><span class="txt editable" data-cover-key="principle-1" spellcheck="false"><strong>Process is the operator.</strong><span>SOPs, PFMEA, IQC, OQC, PDI drive outcomes. Heroics are failure signals.</span></span></li>
+        <li><span class="num">3</span><span class="txt editable" data-cover-key="principle-2" spellcheck="false"><strong>Lot is the unit of discipline.</strong><span>Every lot is a controlled cycle — defined inputs, gates, sign-offs. No lot starts or closes without its checks.</span></span></li>
+        <li><span class="num">4</span><span class="txt editable" data-cover-key="principle-3" spellcheck="false"><strong>Partners are co-owners, not vendors.</strong><span>Held to Nuuk's cost and quality bar through contracts, scorecards, and shared CAPA.</span></span></li>
+        <li><span class="num">5</span><span class="txt editable" data-cover-key="principle-4" spellcheck="false"><strong>Close the loop on failure.</strong><span>Every market return and warranty case feeds PFMEA, CAPA, and SOPs. Weekly review is the hinge.</span></span></li>
+        <li><span class="num">6</span><span class="txt editable" data-cover-key="principle-5" spellcheck="false"><strong>Capital efficiency is a KPI.</strong><span>Negative WC via supplier credit days > inventory + receivables days is an explicit design goal.</span></span></li>
+        <li><span class="num">7</span><span class="txt editable" data-cover-key="principle-6" spellcheck="false"><strong>Leaders' eyes on exceptions.</strong><span>Review cadences focus on variance and exceptions, not averages. Daily during production, weekly otherwise.</span></span></li>
+      </ol>
+    </div>
+
+    <div class="cover-card">
+      <h3><span class="icon">📊</span>Team KPIs — the 6 legs of our North Star</h3>
+      <div class="kpi-strip">
+        <div class="kpi-card"><div class="kc-leg">Leg 1</div><div class="kc-metric editable" data-cover-key="kpi-metric-0" spellcheck="false">On-Time Production</div><div class="kc-desc editable" data-cover-key="kpi-desc-0" spellcheck="false">Production plan adherence · lot cycle-time · kit OTIF · BOM readiness at T-0</div></div>
+        <div class="kpi-card green"><div class="kc-leg">Leg 2</div><div class="kc-metric editable" data-cover-key="kpi-metric-1" spellcheck="false">Nuuk Quality Delivered</div><div class="kc-desc editable" data-cover-key="kpi-desc-1" spellcheck="false">PDI pass · field failure rate · IQC/OQC · FPY · warranty cost/unit · CAPA TAT</div></div>
+        <div class="kpi-card amber"><div class="kc-leg">Leg 3</div><div class="kc-metric editable" data-cover-key="kpi-metric-2" spellcheck="false">Cost Competitiveness</div><div class="kc-desc editable" data-cover-key="kpi-desc-2" spellcheck="false">MII NLC vs China · CM2% · conversion cost/unit · negotiated savings</div></div>
+        <div class="kpi-card"><div class="kc-leg">Leg 4</div><div class="kc-metric editable" data-cover-key="kpi-metric-3" spellcheck="false">Localisation & Scale</div><div class="kc-desc editable" data-cover-key="kpi-desc-3" spellcheck="false">MII value-add % · # SKUs live vs plan · sub-assembly localisation · NPI TAT</div></div>
+        <div class="kpi-card green"><div class="kc-leg">Leg 5</div><div class="kc-metric editable" data-cover-key="kpi-metric-4" spellcheck="false">Capital Efficiency</div><div class="kc-desc editable" data-cover-key="kpi-desc-4" spellcheck="false">Working capital days · DPO · in-transit days · FG inventory days · payment TAT</div></div>
+        <div class="kpi-card red"><div class="kc-leg">Leg 6</div><div class="kc-metric editable" data-cover-key="kpi-metric-5" spellcheck="false">BIS & Regulatory</div><div class="kc-desc editable" data-cover-key="kpi-desc-5" spellcheck="false">BIS-certified SKUs % · sales disruption incidents · compliance audit score</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB 2: ORG STRUCTURE
+     ========================================================= -->
+<div class="tab-panel" id="tab-org">
+  <div class="org-wrap">
+    <div class="org-toggle">
+      <button class="mode-btn active" data-view="current" onclick="setOrgView('current')">Current (Apr 2026)</button>
+      <button class="mode-btn" data-view="future" onclick="setOrgView('future')">+6 Months (Oct 2026)</button>
+      <div class="org-legend">
+        <span><span class="sw cur"></span>Current role</span>
+        <span><span class="sw new"></span>Planned new hire</span>
+        <span style="margin-left:10px;">Click any role → view Input (leading · controllable) + Output (lagging · outcomes) KPIs</span>
+      </div>
+    </div>
+    <div id="orgTree"></div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB 3: PROCESS FLOW
+     ========================================================= -->
+<div class="tab-panel" id="tab-flow">
+  <div style="padding: 10px 22px; display:flex; justify-content: space-between; align-items:center; gap: 10px; flex-wrap: wrap; background: var(--panel); border-bottom: 1px solid var(--border);">
+    <input class="search" id="flowSearch" placeholder="Search role, SOP, step…" />
+    <div class="controls">
+      <button class="btn" onclick="expandAll(true)">Expand all</button>
+      <button class="btn" onclick="expandAll(false)">Collapse all</button>
+      <button class="btn primary" onclick="fitView()">Fit</button>
+    </div>
+  </div>
+  <div class="viewport" id="viewport">
+    <div class="canvas" id="canvas"></div>
+    <div class="legend">
+      <span><span class="dot role"></span>MII role</span>
+      <span><span class="dot fn"></span>Other team</span>
+      <span><span class="dot sop"></span>SOP (click)</span>
+      <span>Scroll/pinch = zoom · drag empty = pan</span>
+    </div>
+    <div class="zoom-ui">
+      <button class="btn" onclick="zoomBy(1/1.2)">−</button>
+      <button class="btn" onclick="resetZoom()">100%</button>
+      <button class="btn" onclick="zoomBy(1.2)">+</button>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     TAB 4: KPI TREE
+     ========================================================= -->
+<div class="tab-panel" id="tab-kpi">
+  <div class="kpi-wrap">
+    <div class="kpi-intro">
+      <div class="flow-step"><span class="badge b1">1</span><span>Input</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><span class="badge b2">2</span><span>Enabler built</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><span class="badge b3">3</span><span>Leading KPI (what we control)</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step"><span class="badge b4">4</span><span>Lagging KPI (business outcome)</span></div>
+      <div style="margin-left:auto; font-size: 11.5px; color: var(--muted);">Click any category to expand.</div>
+    </div>
+    <div class="kpi-filter-bar">
+      <input class="search" id="kpiSearch" placeholder="Search KPI / input / enabler…" />
+      <select id="kpiOwnerFilter">
+        <option value="">All owners</option>
+        <option value="mii">MII Lead</option>
+        <option value="pp-lead">Production & Planning Lead</option>
+        <option value="pp-assoc">Project & Planning Associate</option>
+        <option value="p-lead">Process Lead</option>
+        <option value="p-engg">Process Engineer</option>
+        <option value="sc">Supply Chain Manager</option>
+        <option value="fin">Finance Associate</option>
+      </select>
+    </div>
+    <div id="kpiCategories"></div>
+  </div>
+</div>
+
+<!-- SOP panel -->
+<aside class="sop-panel" id="sopPanel">
+  <div class="sp-head">
+    <h3>SOP Library</h3>
+    <span class="close btn" onclick="toggleSopPanel()">×</span>
+  </div>
+  <div class="sp-body" id="sopList"></div>
+</aside>
+
+<!-- Modal -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target.id==='modalBg')closeModal()">
+  <div class="modal">
+    <div class="m-head">
+      <h3 id="modalTitle">SOP</h3>
+      <span class="close" onclick="closeModal()">×</span>
+    </div>
+    <div class="m-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+/* =========================
+   THEME + TABS
+   ========================= */
+function toggleTheme() {
+  const root = document.documentElement;
+  const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+  root.dataset.theme = next;
+  document.getElementById('themeBtn').textContent = next === 'light' ? '🌙 Dark' : '☀ Light';
+}
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    if (tab.dataset.tab === 'flow') setTimeout(fitView, 30);
+  });
+});
+
+/* =========================
+   SOP LIBRARY
+   ========================= */
+const SOPS = [
+  { id:'PKG-01', cat:'Packaging SOP (India)', name:'Packaging Material Development SOP' },
+  { id:'PKG-02', cat:'Packaging SOP (India)', name:'Packaging Validation & Drop Test SOP (ISTA)' },
+  { id:'PKG-03', cat:'Packaging SOP (China)', name:'SKD Packaging SOP' },
+  { id:'SC-01',  cat:'Supply Chain',          name:'Warehouse Handling & Storage SOP' },
+  { id:'SC-02',  cat:'Supply Chain',          name:'Dispatch & Logistics SOP' },
+  { id:'SC-03',  cat:'Supply Chain',          name:'Inbound Logistics & CFA Coordination SOP' },
+  { id:'VEN-01', cat:'Vendor Development & Sourcing', name:'Supplier Negotiation & Cost Finalization SOP' },
+  { id:'VEN-02', cat:'Vendor Development & Sourcing', name:'Supplier Performance Scorecard SOP' },
+  { id:'VEN-03', cat:'Vendor Development & Sourcing', name:'Supplier Audit SOP (Technical + Quality + Commercial)' },
+  { id:'VEN-04', cat:'Vendor Development & Sourcing', name:'Approved Vendor List (AVL) Management SOP' },
+  { id:'VEN-05', cat:'Vendor Development & Sourcing', name:'Vendor Identification, Comparison & Onboarding SOP' },
+  { id:'PDP-01', cat:'Product Development',   name:'PDP Charter (Product Development Process) for MII' },
+  { id:'PDP-02', cat:'Product Development',   name:'Design Freeze & Change Management SOP (ECN/ECR)' },
+  { id:'PDP-03', cat:'Product Development',   name:'BOM Finalization & Costing SOP/Template' },
+  { id:'QA-01',  cat:'Quality & Testing',     name:'Incoming Quality Control (IQC) SOP' },
+  { id:'QA-02',  cat:'Quality & Testing',     name:'In-Process Quality Control (IPQC) SOP' },
+  { id:'QA-03',  cat:'Quality & Testing',     name:'Outgoing Quality Control (OQC) SOP' },
+  { id:'QA-04',  cat:'Quality & Testing',     name:'Pre-Dispatch Inspection (PDI) SOP' },
+  { id:'QA-05',  cat:'Quality Defect Analysis', name:'Defect Analysis (RCA/CAPA) SOP' },
+  { id:'QA-06',  cat:'Quality Defect Analysis', name:'Field Failure & Warranty Return Feedback Loop SOP' },
+  { id:'PPC-01', cat:'Production Planning & Manufacturing', name:'Production Planning & Control (PPC) SOP' },
+  { id:'PPC-02', cat:'Production Planning & Manufacturing', name:'Material Requirement Planning (MRP) SOP' },
+  { id:'PPC-03', cat:'Production Planning & Manufacturing', name:'Work Instruction & Operator Training SOP' },
+  { id:'PPC-04', cat:'Production Planning & Manufacturing', name:'Lot Release & Dispatch Readiness SOP' },
+  { id:'TOOL-01',cat:'Tooling & Development', name:'Tool Trial & Validation SOP (T0 / T1 / T2)' },
+  { id:'TOOL-02',cat:'Tooling & Development', name:'Golden Sample Approval SOP' },
+  { id:'TOOL-03',cat:'Tooling & Development', name:'Tool Maintenance & Lifecycle SOP' },
+  { id:'LOC-01', cat:'Localization',          name:'Localization Strategy & Execution SOP (SKD → CKD → MII)' },
+  { id:'LOC-02', cat:'Localization',          name:'Value Engineering / Cost Reduction Charter' },
+  { id:'COM-01', cat:'Compliance',            name:'Labeling & Compliance SOP (BIS marking, MRP, caution)' },
+  { id:'COM-02', cat:'Compliance',            name:'BIS Certification SOP' },
+  { id:'COM-03', cat:'Compliance',            name:'Product Compliance & Documentation SOP' },
+  { id:'COC-01', cat:'Code of Conduct',       name:'Code of Conduct SOP (MII Team)' },
+  { id:'COC-02', cat:'Code of Conduct',       name:'Code of Conduct SOP (Supplier)' },
+  { id:'ADM-01', cat:'Admin',                 name:'MII Travel Policy (Cab, Accommodation, Food, Workstation)' },
+  { id:'FIN-01', cat:'Finance & WC',          name:'Vendor Payment, DPO & Working Capital SOP' },
+  { id:'NPI-01', cat:'NPI / Industrialisation', name:'NPI Kickoff & Stage-Gate Review SOP' },
+];
+
+/* =========================
+   ORG STRUCTURE DATA
+   5 direct reports under MII Lead, clean hierarchy.
+   Each role has Input (Lagging) + Output (Leading) KPIs — unique & balanced.
+   ========================= */
+let ROLE_KPIS = {
+  'MII Lead': {
+    leading: [ // Input — controllable levers the MII Lead pulls
+      'MII value addition %',
+      '# partners onboarded / active',
+      '# SKUs live vs plan (SKD + MII)',
+      'Quarterly negotiated savings delivered',
+      'QBR action closure %',
+    ],
+    lagging: [ // Output — business outcomes owned
+      'MII NLC vs China NLC',
+      'CM2 % on MII SKUs',
+      'Working capital days (MII portfolio)',
+      'Field failure rate — MII attributable',
+      'Partner relationship health index',
+    ]
+  },
+  'Production & Planning Lead': {
+    leading: [
+      'Production plan adherence %',
+      'Lot cycle-time adherence %',
+      'Plan freeze compliance',
+      'Forecast-to-production alignment',
+      'Daily output vs plan %',
+    ],
+    lagging: [
+      'Overall OTP % (on-time production)',
+      'FG inventory days at manufacturer',
+      'Stock-out incidents — MII SKUs',
+      'Conversion cost per unit',
+    ]
+  },
+  'Project & Planning Associate': {
+    leading: [
+      'BOM readiness % at T-0 — assigned',
+      'MRP requisition accuracy',
+      'Daily MIS submission on-time %',
+      'Issue-resolution TAT (in-production)',
+      'Lot closure checklist completion',
+    ],
+    lagging: [
+      'On-time lot closure — assigned products',
+      'Line downtime hrs / lot — assigned',
+    ]
+  },
+  'Process Lead': {
+    leading: [
+      'PFMEA coverage %',
+      'Work Instructions coverage %',
+      'Plant + supplier audit score',
+      'BIS-certified SKUs % of pipeline',
+      'SOP adherence audit score',
+    ],
+    lagging: [
+      'PDI pass rate % (quality system view)',
+      'Field failure rate — MII attributable',
+      'Warranty cost per unit — MII SKUs',
+      'CAPA closure TAT',
+    ]
+  },
+  'Process Engineer': {
+    leading: [
+      'IQC pass rate — assigned SKD kits',
+      'OQC pass rate — assigned lines',
+      'PFMEA actions implemented %',
+      'Process parameter compliance %',
+      'Station-level WI compliance',
+    ],
+    lagging: [
+      'Line defect rate — assigned products',
+      'Rework % by lot — assigned',
+    ]
+  },
+  'Demand & Supply Planning Associate': {
+    leading: [
+      'Safety stock adherence %',
+      'Plan freeze compliance',
+      'Demand-to-production plan alignment',
+      'Lead-time adherence by SKU',
+    ],
+    lagging: [
+      'Forecast accuracy (MAPE) — MII/SKD',
+      'Stock-out incidents',
+      'Over-stock days',
+    ]
+  },
+  'Supply Chain Manager': {
+    leading: [
+      'CFA clearance TAT',
+      'Shipment documentation accuracy %',
+      'China supplier coordination cycle time',
+      'Integrated supply calendar adherence',
+    ],
+    lagging: [
+      'SKD kit OTIF from China',
+      'Landed cost variance vs plan',
+      'In-transit inventory days',
+    ]
+  },
+  'Finance Associate': {
+    leading: [
+      'Vendor payment cycle TAT',
+      'Landed cost accuracy',
+      'CM2 accuracy on MII SKUs',
+      '3-way match completion %',
+      'Should-cost model coverage %',
+    ],
+    lagging: [
+      'Supplier credit (DPO) days',
+      'Cost tracking MOM variance vs budget',
+      'Payment disputes %',
+    ]
+  },
+};
+
+let CUSTOM_ROLES = [];
+let currentOrgView = 'current';
+let ORG = {
+  current: {
+    root: { role: 'MII Lead', person: 'Kartik Gupta', kpiKey: 'MII Lead' },
+    directs: [
+      {
+        role: 'Production & Planning Lead', person: 'Ramandeep Singh', kpiKey: 'Production & Planning Lead',
+        children: [
+          { role: 'Project & Planning Associate', person: '<Open>', kpiKey: 'Project & Planning Associate' },
+        ]
+      },
+      {
+        role: 'Process Lead', person: 'Shivesh Thakral', kpiKey: 'Process Lead',
+        children: [
+          { role: 'Process Engineer', person: 'Satyam', kpiKey: 'Process Engineer' },
+          { role: 'Process Engineer', person: 'Mukesh', kpiKey: 'Process Engineer' },
+        ]
+      },
+      { role: 'Demand & Supply Planning Associate', person: 'Mahesh', kpiKey: 'Demand & Supply Planning Associate', children: [] },
+      { role: 'Supply Chain Manager', person: 'Sahil', kpiKey: 'Supply Chain Manager', children: [] },
+      { role: 'Finance Associate', person: 'Deshna', kpiKey: 'Finance Associate', children: [] },
+    ]
+  },
+  future: {
+    root: { role: 'MII Lead', person: 'Kartik Gupta', kpiKey: 'MII Lead' },
+    directs: [
+      {
+        role: 'Production & Planning Lead', person: 'Ramandeep Singh', kpiKey: 'Production & Planning Lead',
+        children: [
+          { role: 'Project & Planning Associate', person: '<Open>', kpiKey: 'Project & Planning Associate' },
+          { role: 'Project & Planning Associate', person: 'New Hire', kpiKey: 'Project & Planning Associate', isNew: true },
+        ]
+      },
+      {
+        role: 'Process Lead', person: 'Shivesh Thakral', kpiKey: 'Process Lead',
+        children: [
+          { role: 'Process Engineer', person: 'Satyam', kpiKey: 'Process Engineer' },
+          { role: 'Process Engineer', person: 'Mukesh', kpiKey: 'Process Engineer' },
+          { role: 'Process Engineer', person: 'New Hire', kpiKey: 'Process Engineer', isNew: true },
+        ]
+      },
+      { role: 'Demand & Supply Planning Associate', person: 'Mahesh', kpiKey: 'Demand & Supply Planning Associate', children: [] },
+      { role: 'Supply Chain Manager', person: 'Sahil', kpiKey: 'Supply Chain Manager', children: [] },
+      { role: 'Finance Associate', person: 'Deshna', kpiKey: 'Finance Associate', children: [] },
+    ]
+  }
+};
+
+function nodeHTML(n, opts = {}) {
+  const isRoot = opts.root;
+  const isNew = n.isNew;
+  const kpiKey = n.kpiKey;
+  const kpis = ROLE_KPIS[kpiKey];
+  const uid = 'n-' + Math.random().toString(36).slice(2, 9);
+
+  const renderKpiList = (arr, type) => arr.map((k, i) => `
+    <li data-key="${escapeAttr(kpiKey)}" data-type="${type}" data-idx="${i}">
+      <span class="editable" onblur="onKpiBlur(this)" spellcheck="false">${escapeHTML(k)}</span>
+      <button class="row-del-btn edit-only" onclick="onKpiRemove(this)" title="Remove">×</button>
+    </li>`).join('');
+
+  const kpiBox = kpis ? `
+    <div class="nm-kpi-toggle" onclick="event.stopPropagation(); this.parentElement.classList.toggle('open'); this.textContent = this.parentElement.classList.contains('open') ? 'Hide KPIs ▲' : 'View KPIs ▾';">View KPIs ▾</div>
+    <div class="nm-kpi-box">
+      <div class="sect lead">Input KPIs (Leading · controllable)</div>
+      <ul>${renderKpiList(kpis.leading || [], 'leading')}</ul>
+      <div class="kpi-add-row edit-only" style="display:none;">
+        <input type="text" placeholder="+ Add leading KPI (Enter to save)"
+               onkeydown="if(event.key==='Enter'){onKpiAdd('${escapeAttr(kpiKey)}','leading',this.value);this.value='';event.preventDefault();}" />
+      </div>
+      <div class="sect lag">Output KPIs (Lagging · outcomes)</div>
+      <ul>${renderKpiList(kpis.lagging || [], 'lagging')}</ul>
+      <div class="kpi-add-row edit-only" style="display:none;">
+        <input type="text" placeholder="+ Add lagging KPI (Enter to save)"
+               onkeydown="if(event.key==='Enter'){onKpiAdd('${escapeAttr(kpiKey)}','lagging',this.value);this.value='';event.preventDefault();}" />
+      </div>
+    </div>` : '';
+  const cls = `node ${isRoot ? 'root' : ''} ${isNew ? 'new' : ''}`;
+  const badge = isNew ? '<span class="nm-badge">NEW</span>' : '';
+  return `<div class="${cls}" id="${uid}">
+    ${badge}
+    <div class="nm-role">${escapeHTML(n.role)}</div>
+    <div class="nm-person">${escapeHTML(n.person)}</div>
+    ${kpiBox}
+  </div>`;
+}
+
+function escapeHTML(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s) { return escapeHTML(s); }
+
+function onKpiBlur(el) {
+  const li = el.closest('li');
+  const key = li.dataset.key;
+  const type = li.dataset.type;
+  const idx = +li.dataset.idx;
+  const val = el.textContent.trim();
+  if (!val) {
+    ROLE_KPIS[key][type].splice(idx, 1);
+    renderOrg(currentOrgView);
+    enableInlineEdit(true);
+    return;
+  }
+  ROLE_KPIS[key][type][idx] = val;
+}
+function onKpiRemove(btn) {
+  const li = btn.closest('li');
+  const key = li.dataset.key;
+  const type = li.dataset.type;
+  const idx = +li.dataset.idx;
+  ROLE_KPIS[key][type].splice(idx, 1);
+  renderOrg(currentOrgView);
+  enableInlineEdit(true);
+}
+function onKpiAdd(key, type, val) {
+  val = (val || '').trim();
+  if (!val) return;
+  if (!ROLE_KPIS[key][type]) ROLE_KPIS[key][type] = [];
+  ROLE_KPIS[key][type].push(val);
+  renderOrg(currentOrgView);
+  enableInlineEdit(true);
+}
+
+function renderOrg(view) {
+  const data = ORG[view];
+  // Build layer-2 columns — each may have layer-3 children below
+  const colHTML = data.directs.map(d => {
+    const children = d.children || [];
+    let l3 = '';
+    if (children.length > 0) {
+      const mult = children.length > 1 ? 'multi' : 'single';
+      const downArm = `<div class="l3-connector"></div>`;
+      const childNodes = children.map(c => `<div class="link">${nodeHTML(c)}</div>`).join('');
+      l3 = `
+        ${downArm}
+        <div class="l3-children ${mult}">${childNodes}</div>
+      `;
+    }
+    return `<div class="col">
+      ${nodeHTML(d)}
+      ${l3}
+    </div>`;
+  }).join('');
+
+  document.getElementById('orgTree').innerHTML = `
+    <div class="org-container">
+      <div class="org-root">${nodeHTML(data.root, { root: true })}</div>
+      <div class="v-down"></div>
+      <div style="width:100%; position: relative;">
+        <div style="position: relative; height: 0;">
+          <div style="position:absolute; top:0; left: 10%; right: 10%; height: 2px; background: var(--border-strong);"></div>
+        </div>
+        <div class="org-layer-2">${colHTML}</div>
+      </div>
+    </div>
+  `;
+}
+function setOrgView(view) {
+  currentOrgView = view;
+  document.querySelectorAll('.org-toggle .mode-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+  renderOrg(view);
+  enableInlineEdit(document.body.classList.contains('edit-mode'));
+}
+
+/* =========================
+   PROCESS FLOW — 6 phases (gates G0–G5)
+   No "Function Head" — always "MII Lead"
+   ========================= */
+let PHASES = [
+  {
+    gate: 'G0', name: 'Strategy & Onboarding', dur: 'Week 0–4',
+    goal: 'SKU localisation path chosen, partner onboarded, MSA signed',
+    stages: [
+      {
+        id: 'S1', title: 'Localisation Strategy & Product Selection',
+        miiPOC: ['MII Lead'],
+        otherPOC: [{ team:'Category / Brand', who:'Category Head' }, { team:'Finance', who:'Finance Associate' }],
+        sops: ['LOC-01','LOC-02','PDP-01'],
+        summary: 'Select SKUs by volume × margin × BIS × complexity and set SKD → CKD → MII path.',
+        steps: [
+          { t: 'SKU longlist & localisation scoring', mii:'MII Lead', other:'Category' },
+          { t: 'SKD / CKD / MII path selection', mii:'MII Lead', other:'Founders sign-off' },
+          { t: 'Business case + CM2 target', mii:'MII Lead', other:'Finance' },
+          { t: 'Quarterly roadmap refresh', mii:'MII Lead' },
+        ]
+      },
+      {
+        id: 'S2', title: 'Vendor Identification & Onboarding',
+        miiPOC: ['MII Lead','Process Lead'],
+        otherPOC: [{ team:'Finance', who:'Finance Associate' }, { team:'Legal', who:'Legal Counsel' }],
+        sops: ['VEN-05','VEN-03','VEN-04','COC-02'],
+        summary: 'Market scan, audit, and add qualified partners to AVL.',
+        steps: [
+          { t: 'Market scan & RFI', mii:'MII Lead + Process Lead' },
+          { t: 'Capability + quality + commercial audit', mii:'Process Lead + Process Engineer', other:'Finance' },
+          { t: 'Sample build / pilot lot evaluation', mii:'Process Engineer' },
+          { t: 'AVL entry + Supplier CoC signed', mii:'MII Lead', other:'Legal' },
+        ]
+      },
+      {
+        id: 'S3', title: 'Commercial Negotiation & MSA',
+        miiPOC: ['MII Lead'],
+        otherPOC: [{ team:'Finance', who:'Finance Associate' }, { team:'Legal', who:'Legal Counsel' }],
+        sops: ['VEN-01','VEN-02','FIN-01'],
+        summary: 'Lock conversion cost, credit terms (DPO), volume commitments, MSA.',
+        steps: [
+          { t: 'Should-cost model', mii:'MII Lead', other:'Finance' },
+          { t: 'Rate card + credit term negotiation', mii:'MII Lead', other:'Finance' },
+          { t: 'Manufacturing Services Agreement (MSA)', mii:'MII Lead', other:'Legal' },
+          { t: 'Scorecard & QBR cadence setup', mii:'MII Lead' },
+        ]
+      },
+    ]
+  },
+  {
+    gate: 'G1', name: 'SKD / CKD Development', dur: 'Week 4–14',
+    goal: 'Design frozen, BOM locked, moulds validated, process docs signed off, BIS certified',
+    stages: [
+      {
+        id: 'S4', title: 'SKD / BOM Finalisation',
+        miiPOC: ['Process Engineer','Production & Planning Lead'],
+        otherPOC: [{ team:'Product / Design', who:'NPI Lead' }, { team:'Supply Chain', who:'SC Manager — for China kit' }],
+        sops: ['PDP-03','PDP-02','PKG-03','NPI-01'],
+        summary: 'Freeze SKD scope, BOM split (China kit vs India BOP), specs.',
+        steps: [
+          { t: 'Sample benchmarking + BIS-readiness review', mii:'Process Engineer', other:'Product' },
+          { t: 'Tech data sheet to Indian supplier', mii:'Process Engineer', other:'Product' },
+          { t: 'SKD alignment — China supplier', mii:'Process Engineer', other:'Supply Chain' },
+          { t: 'SKD alignment — India partner', mii:'Process Engineer' },
+          { t: 'BOP specs finalisation', mii:'Process Engineer' },
+          { t: 'BOM + costing lock, ECR baseline', mii:'Process Engineer', other:'Finance' },
+        ]
+      },
+      {
+        id: 'S5', title: 'Tooling & Mould Development',
+        miiPOC: ['Process Engineer','Process Lead'],
+        otherPOC: [{ team:'Product / Design', who:'Design Engineer' }, { team:'Supply Chain', who:'SC Manager — China moulds' }],
+        sops: ['TOOL-01','TOOL-02','TOOL-03'],
+        summary: 'Plastic mould (China) + steamer/glass lid mould (India) through T0 → T1 → T2 → texturing.',
+        steps: [
+          { t: 'Send 3D design to mould supplier', mii:'Process Engineer', other:'Product' },
+          { t: 'Supplier feedback & iterations', mii:'Process Engineer' },
+          { t: 'Commercial approval + mould init', mii:'MII Lead + Production & Planning Lead' },
+          { t: 'T0 / T1 / T2 trials + final texturing', mii:'Process Engineer' },
+          { t: 'Golden sample sign-off', mii:'Process Lead' },
+          { t: 'PM / lifecycle plan handover', mii:'Process Lead' },
+        ]
+      },
+      {
+        id: 'S6', title: 'Packaging Development',
+        miiPOC: ['Process Engineer','Project & Planning Associate'],
+        otherPOC: [{ team:'Brand', who:'Brand Designer (artwork)' }, { team:'Product', who:'Packaging specialist' }, { team:'Supply Chain', who:'SC Manager — SKD box' }],
+        sops: ['PKG-01','PKG-02','PKG-03'],
+        summary: 'Inner + outer box, poly bag, user manual, brand card, rating labels, Nuuk tape.',
+        steps: [
+          { t: 'Artwork & spec sharing', mii:'Process Engineer', other:'Brand' },
+          { t: 'Drop test iterations (ISTA)', mii:'Process Engineer', other:'Product (QA drop)' },
+          { t: 'Commercial closure + PO', mii:'MII Lead + Production & Planning Lead' },
+          { t: 'Printing, lamination, die cutting, dispatch', mii:'Project & Planning Associate', other:'Packaging partner' },
+          { t: 'User manual / labels / stickers', mii:'Process Engineer', other:'Brand' },
+        ]
+      },
+      {
+        id: 'S7', title: 'Process Docs (PFD · PFMEA · WI · Control Plan)',
+        miiPOC: ['Process Lead','Process Engineer'],
+        otherPOC: [{ team:'Partner', who:'Partner QA Head' }],
+        sops: ['PPC-03','QA-05'],
+        summary: 'All process documents finalised before first production lot.',
+        steps: [
+          { t: 'Process Flow Diagram (PFD)', mii:'Process Lead + Process Engineer' },
+          { t: 'PFMEA per SKU', mii:'Process Lead + Process Engineer' },
+          { t: 'Work instructions per station', mii:'Process Engineer' },
+          { t: 'Control plan + checkpoints', mii:'Process Lead' },
+        ]
+      },
+      {
+        id: 'S8', title: 'BIS & Regulatory Compliance',
+        miiPOC: ['Process Lead','MII Lead'],
+        otherPOC: [{ team:'Legal', who:'Legal Counsel' }, { team:'Partner', who:'Mfr partner' }],
+        sops: ['COM-01','COM-02','COM-03'],
+        summary: 'BIS certification + labelling + documentation before first dispatch.',
+        steps: [
+          { t: 'BIS application', mii:'Process Lead', other:'Partner' },
+          { t: 'Sample dispatch + BIS testing', mii:'Process Lead', other:'Partner' },
+          { t: 'Test report + N20 + inspector visit', mii:'Process Lead' },
+          { t: 'Certification + labelling rollout', mii:'Process Lead' },
+          { t: 'Product compliance dossier lock', mii:'Process Lead', other:'Legal' },
+        ]
+      },
+    ]
+  },
+  {
+    gate: 'G2', name: 'Production Planning & Inbound', dur: 'Week 12–20',
+    goal: 'First production plan live; SKD kits landed & IQC-cleared',
+    stages: [
+      {
+        id: 'S9', title: 'Demand & Production Planning',
+        miiPOC: ['Production & Planning Lead','Project & Planning Associate','Demand & Supply Planning Associate'],
+        otherPOC: [{ team:'Category / Sales', who:'Sales Planner' }, { team:'Supply Chain', who:'SC Manager — kit ETAs' }],
+        sops: ['PPC-01','PPC-02'],
+        summary: 'Convert demand plan → production plan → MRP with freeze windows.',
+        steps: [
+          { t: 'Monthly demand plan (channel × SKU × season)', mii:'Demand & Supply Planner', other:'Sales' },
+          { t: 'Safety stock & norms review', mii:'Demand & Supply Planner' },
+          { t: 'Production plan vs mfr capacity', mii:'Production & Planning Lead' },
+          { t: 'MRP — SKD kit + BOP requisitions', mii:'Project & Planning Associate' },
+          { t: 'Plan freeze window enforcement', mii:'Production & Planning Lead' },
+        ]
+      },
+      {
+        id: 'S10', title: 'SKD Kit Manufacturing & Shipping (China)',
+        miiPOC: ['Process Engineer','Project & Planning Associate'],
+        otherPOC: [{ team:'Supply Chain', who:'SC Manager — China' }, { team:'Logistics', who:'Freight / CFA' }, { team:'Finance', who:'Landed cost' }],
+        sops: ['PKG-03','SC-03','FIN-01'],
+        summary: 'China production, OQC at source, stuffing, shipping to India mfr.',
+        steps: [
+          { t: 'Kit PO + shipping forecast', mii:'Project & Planning Associate', other:'Supply Chain' },
+          { t: 'Manufacturing at China + OQC at China', mii:'Process Engineer', other:'Supply Chain' },
+          { t: 'Stuffing + shipping + customs + ICD', other:'Supply Chain + Logistics' },
+          { t: 'Landed cost booking + variance', other:'Finance' },
+        ]
+      },
+      {
+        id: 'S11', title: 'Inbound Quality — IQC',
+        miiPOC: ['Process Engineer','Process Lead'],
+        otherPOC: [{ team:'Supply Chain', who:'for RTV / disputes' }, { team:'Partner', who:'Partner QA' }],
+        sops: ['QA-01','QA-05'],
+        summary: 'Kit lot acceptance at India mfr — IQC against spec sheets.',
+        steps: [
+          { t: 'Receipt + kit count vs packing list', mii:'Project & Planning Associate', other:'Partner' },
+          { t: 'IQC inspection per plan', mii:'Process Engineer' },
+          { t: 'Accept / reject / conditional', mii:'Process Engineer + Process Lead' },
+          { t: 'NC / RCA / RTV routing', mii:'Process Lead', other:'Supply Chain' },
+        ]
+      },
+    ]
+  },
+  {
+    gate: 'G3', name: 'Production & Quality', dur: 'Week 18–28',
+    goal: 'Stable production — 3 consecutive lots hitting OTP + PDI + FPY targets',
+    stages: [
+      {
+        id: 'S12', title: 'Lot Execution & In-Process Quality',
+        miiPOC: ['Production & Planning Lead','Process Engineer','Project & Planning Associate'],
+        otherPOC: [{ team:'Partner', who:'Partner shop floor' }],
+        sops: ['PPC-01','QA-02','PPC-03'],
+        summary: 'Lot-based execution with IPQC, FPY, downtime tracked daily.',
+        steps: [
+          { t: 'BOM readiness check at T-0', mii:'Project & Planning Associate' },
+          { t: 'Line setup + WI verification', mii:'Process Engineer' },
+          { t: 'IPQC checkpoints per lot', mii:'Process Engineer' },
+          { t: 'FPY / rework / downtime logging', mii:'Process Engineer + Project & Planning Associate' },
+          { t: 'In-line escalation & containment', mii:'Process Lead + Process Engineer' },
+        ]
+      },
+      {
+        id: 'S13', title: 'Outgoing Quality & PDI',
+        miiPOC: ['Process Lead','Process Engineer'],
+        otherPOC: [{ team:'Partner', who:'Partner QA' }],
+        sops: ['QA-03','QA-04','PPC-04'],
+        summary: 'OQC + 100% PDI gate before lot release & dispatch.',
+        steps: [
+          { t: 'OQC sampling plan per lot', mii:'Process Engineer' },
+          { t: 'PDI execution per SKU', mii:'Process Engineer' },
+          { t: 'Lot release sign-off', mii:'Process Lead' },
+          { t: 'Rejected units routing (rework / scrap)', mii:'Process Engineer + Process Lead' },
+        ]
+      },
+      {
+        id: 'S14', title: 'Daily Production Cadence & Issue Escalation',
+        miiPOC: ['Production & Planning Lead','Process Lead'],
+        otherPOC: [{ team:'Partner', who:'Partner Plant Manager' }],
+        sops: ['PPC-01','QA-02'],
+        summary: 'Daily stand-ups during active production; escalate exceptions, not averages.',
+        steps: [
+          { t: 'Daily production huddle', mii:'Production & Planning Lead', other:'Partner' },
+          { t: 'Exception log + owner + ETA', mii:'Production & Planning Lead' },
+          { t: 'Weekly variance review to MII Lead', mii:'Production & Planning Lead' },
+        ]
+      },
+    ]
+  },
+  {
+    gate: 'G4', name: 'Dispatch & Finance', dur: 'Week 24+ (ongoing)',
+    goal: 'FG dispatched on time; vendors paid per DPO; NLC reconciled',
+    stages: [
+      {
+        id: 'S15', title: 'Dispatch & Warehousing',
+        miiPOC: ['Production & Planning Lead','Project & Planning Associate'],
+        otherPOC: [{ team:'Logistics', who:'Warehouse / 3PL' }, { team:'Supply Chain', who:'Nuuk WH' }],
+        sops: ['SC-01','SC-02','PPC-04'],
+        summary: 'FG movement from mfr → Nuuk WH / direct-to-channel.',
+        steps: [
+          { t: 'FG packing + invoice + e-way bill', mii:'Project & Planning Associate', other:'Partner logistics' },
+          { t: 'Dispatch to Nuuk WH / channel', mii:'Production & Planning Lead', other:'Logistics' },
+          { t: 'GRN + warehouse put-away', other:'Supply Chain (Nuuk WH)' },
+        ]
+      },
+      {
+        id: 'S16', title: 'Vendor Payments & DPO Management',
+        miiPOC: ['Finance Associate','MII Lead'],
+        otherPOC: [{ team:'Finance', who:'AP team' }],
+        sops: ['FIN-01','VEN-01'],
+        summary: 'Vendor invoice → 3-way match → payment within DPO window.',
+        steps: [
+          { t: 'Invoice receipt + 3-way match', mii:'Finance Associate' },
+          { t: 'Payment within DPO window', mii:'Finance Associate' },
+          { t: 'Dispute resolution', mii:'Finance Associate', other:'Finance AP' },
+        ]
+      },
+      {
+        id: 'S17', title: 'Cost Tracking, NLC & Working Capital',
+        miiPOC: ['Finance Associate','MII Lead'],
+        otherPOC: [{ team:'Finance', who:'FP&A' }],
+        sops: ['FIN-01','PDP-03'],
+        summary: 'Monthly MIS on NLC variance, conversion cost, and WC days.',
+        steps: [
+          { t: 'NLC vs should-cost variance', mii:'Finance Associate' },
+          { t: 'Conversion cost tracking', mii:'Finance Associate' },
+          { t: 'WC dashboard (Inv + AR − AP)', mii:'Finance Associate + MII Lead' },
+          { t: 'Monthly review with MII Lead', mii:'MII Lead' },
+        ]
+      },
+    ]
+  },
+  {
+    gate: 'G5', name: 'Governance & Continuous Improvement', dur: 'Always-on',
+    goal: 'Partner performance managed; NLC ↓ each quarter; SKD → CKD → full MII',
+    stages: [
+      {
+        id: 'S18', title: 'Quarterly Business Review (QBR) with Manufacturers',
+        miiPOC: ['MII Lead','Process Lead'],
+        otherPOC: [{ team:'Partner', who:'Partner CEOs' }, { team:'Finance', who:'Finance Associate' }],
+        sops: ['VEN-02','COC-02'],
+        summary: 'Quarterly deep-dive with partner CEOs — quality, cost, delivery, roadmap.',
+        steps: [
+          { t: 'QBR pack preparation', mii:'MII Lead + Process Lead' },
+          { t: 'QBR session (in-person / on-site)', mii:'MII Lead', other:'Partner CEOs' },
+          { t: 'Action tracker + owner + due date', mii:'MII Lead' },
+          { t: 'Founder readout post-QBR', mii:'MII Lead' },
+        ]
+      },
+      {
+        id: 'S19', title: 'Manufacturer Scorecard (Monthly)',
+        miiPOC: ['MII Lead','Process Lead'],
+        otherPOC: [{ team:'Finance', who:'Finance Associate' }],
+        sops: ['VEN-02','VEN-03'],
+        summary: 'Monthly scorecard — quality, OTP, cost, responsiveness, CAPA closure.',
+        steps: [
+          { t: 'Data pull (OTP, PDI, field, cost)', mii:'Process Lead + Finance Associate' },
+          { t: 'Score calculation vs SLA', mii:'MII Lead' },
+          { t: 'Share with partner + discussion', mii:'MII Lead' },
+          { t: 'Corrective action plan', mii:'Process Lead' },
+        ]
+      },
+      {
+        id: 'S20', title: 'Root Cause Analysis — Field Failures',
+        miiPOC: ['Process Lead','Process Engineer'],
+        otherPOC: [{ team:'Service / Returns', who:'Service Head' }, { team:'Partner', who:'Partner QA' }],
+        sops: ['QA-05','QA-06'],
+        summary: 'Weekly return/warranty review → MII-attributable RCA → CAPA → PFMEA update.',
+        steps: [
+          { t: 'Returns categorisation (MII-attributable?)', mii:'Process Lead', other:'Service' },
+          { t: 'RCA on attributable failures', mii:'Process Lead + Process Engineer' },
+          { t: 'CAPA live-on-line + PFMEA update', mii:'Process Lead' },
+          { t: 'Scorecard impact to partner', mii:'MII Lead' },
+        ]
+      },
+      {
+        id: 'S21', title: 'Plant & Supplier Audits',
+        miiPOC: ['Process Lead','Process Engineer'],
+        otherPOC: [{ team:'Partner', who:'Partner QA Head' }],
+        sops: ['VEN-03','QA-05'],
+        summary: 'Scheduled technical + quality + commercial audits; findings closure tracked.',
+        steps: [
+          { t: 'Annual audit calendar', mii:'Process Lead' },
+          { t: 'On-site audit execution', mii:'Process Lead + Process Engineer' },
+          { t: 'Findings + closure tracker', mii:'Process Lead' },
+        ]
+      },
+      {
+        id: 'S22', title: 'Localisation (SKD → CKD → MII) & Value Engineering',
+        miiPOC: ['MII Lead','Process Lead'],
+        otherPOC: [{ team:'Finance', who:'Finance Associate' }, { team:'Product / Design', who:'Design Engineer' }, { team:'Partner', who:'Partner engg' }],
+        sops: ['LOC-01','LOC-02','PDP-02'],
+        summary: 'Drive NLC down; step up localisation depth; feed savings to CM2.',
+        steps: [
+          { t: 'VE idea pipeline (material / process / BOM)', mii:'Process Lead', other:'Partner' },
+          { t: 'Savings validation + ECN', mii:'Process Lead', other:'Finance + Product' },
+          { t: 'Localisation step-up (SKD→CKD→MII)', mii:'MII Lead' },
+          { t: 'Cost-out tracking to CM2 impact', mii:'Finance Associate' },
+        ]
+      },
+    ]
+  }
+];
+
+function sopChipsHTML(ids) {
+  if (!ids || !ids.length) return '';
+  return `<div class="chips">${ids.map(id => {
+    const s = SOPS.find(x => x.id === id);
+    if (!s) return '';
+    const short = s.name.length > 34 ? s.name.slice(0,32)+'…' : s.name;
+    return `<span class="chip sop" onclick="openSop('${id}'); event.stopPropagation();" title="${s.name}">${id} · ${short}</span>`;
+  }).join('')}</div>`;
+}
+
+function getAllRoleOptions() {
+  const base = Object.keys(ROLE_KPIS);
+  const used = new Set();
+  PHASES.forEach(p => p.stages.forEach(s => s.steps.forEach(st => {
+    if (st.mii) used.add(st.mii);
+  })));
+  const all = new Set([...base, ...CUSTOM_ROLES, ...used]);
+  return Array.from(all).sort((a, b) => a.localeCompare(b));
+}
+
+function stageHTML(stage, pi, si) {
+  const roleOpts = getAllRoleOptions();
+  const stepHTML = stage.steps.map((s, i) => {
+    const currentRole = s.mii || '';
+    const inList = roleOpts.includes(currentRole) || !currentRole;
+    const optionsHTML = roleOpts.map(r =>
+      `<option value="${escapeAttr(r)}" ${r === currentRole ? 'selected' : ''}>${escapeHTML(r)}</option>`
+    ).join('');
+    const unknownOpt = (!inList && currentRole) ? `<option value="${escapeAttr(currentRole)}" selected>${escapeHTML(currentRole)}</option>` : '';
+    const emptyOpt = !currentRole ? `<option value="" selected>— (none)</option>` : `<option value="">— (none)</option>`;
+    return `
+    <div class="sub-row" data-pi="${pi}" data-si="${si}" data-step="${i}">
+      <div class="st-text">
+        ${(i+1).toString().padStart(2,'0')} ·
+        <span class="editable" onblur="onStepTextBlur(this)" spellcheck="false">${escapeHTML(s.t)}</span>
+      </div>
+      <div class="st-meta">
+        <span class="chip role hide-in-edit">${s.mii ? 'MII: ' + escapeHTML(s.mii) : '<span style="color:var(--muted)">No role</span>'}</span>
+        <select class="role-select edit-only" style="display:none;" onchange="onStepRoleChange(this)">
+          ${emptyOpt}
+          ${unknownOpt}
+          ${optionsHTML}
+          <option value="__add__">+ Add new role…</option>
+        </select>
+        ${s.other ? `<span class="chip fn">Other: ${escapeHTML(s.other)}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  const miiChips = stage.miiPOC.map(r => `<span class="chip role">${escapeHTML(r)}</span>`).join('');
+  const otherChips = stage.otherPOC.map(o => `<span class="chip fn">${escapeHTML(o.team)}${o.who ? ' · '+escapeHTML(o.who) : ''}</span>`).join('');
+  const searchStr = (stage.title+' '+stage.summary+' '+stage.miiPOC.join(' ')+' '+stage.otherPOC.map(o=>o.team+' '+(o.who||'')).join(' ')+' '+(stage.sops||[]).map(id=>{const s=SOPS.find(x=>x.id===id);return s?s.name+' '+s.id:'';}).join(' ')+' '+stage.steps.map(s=>s.t+' '+(s.mii||'')+' '+(s.other||'')).join(' ')).toLowerCase();
+  return `
+    <div class="stage" id="${stage.id}" data-search="${escapeAttr(searchStr)}">
+      <div class="head" onclick="if(!event.target.closest('.editable'))toggleStage('${stage.id}')">
+        <div><div class="name"><span class="editable" onblur="onStageFieldBlur(this,${pi},${si},'title')" spellcheck="false">${escapeHTML(stage.title)}</span></div></div>
+        <div style="display:flex; gap: 6px; align-items:center;">
+          <span class="idx">${stage.id}</span>
+          <span class="arr">▾</span>
+        </div>
+      </div>
+      <div class="details">
+        <div class="summary"><span class="editable" onblur="onStageFieldBlur(this,${pi},${si},'summary')" spellcheck="false">${escapeHTML(stage.summary)}</span></div>
+        <div class="lbl">MII POC (roles)</div>
+        <div class="chips">${miiChips}</div>
+        <div class="lbl">Other team POCs</div>
+        <div class="chips">${otherChips || '<span class="chip">—</span>'}</div>
+        <div class="lbl">SOPs</div>
+        ${sopChipsHTML(stage.sops) || '<div style="font-size:11px;color:var(--muted);">—</div>'}
+        <div class="lbl">Detailed steps</div>
+        <div class="sub-steps">${stepHTML}</div>
+      </div>
+    </div>`;
+}
+
+function onStepTextBlur(el) {
+  const row = el.closest('.sub-row');
+  const pi = +row.dataset.pi, si = +row.dataset.si, step = +row.dataset.step;
+  const val = el.textContent.trim();
+  PHASES[pi].stages[si].steps[step].t = val;
+}
+function onStageFieldBlur(el, pi, si, field) {
+  const val = el.textContent.trim();
+  if (val) PHASES[pi].stages[si][field] = val;
+}
+function onPhaseFieldBlur(el, pi, field) {
+  const val = el.textContent.trim();
+  if (val) PHASES[pi][field] = val;
+}
+function onStepRoleChange(sel) {
+  const row = sel.closest('.sub-row');
+  const pi = +row.dataset.pi, si = +row.dataset.si, step = +row.dataset.step;
+  if (sel.value === '__add__') {
+    const newRole = prompt('Enter new role name:');
+    if (newRole && newRole.trim()) {
+      const r = newRole.trim();
+      if (!CUSTOM_ROLES.includes(r)) CUSTOM_ROLES.push(r);
+      PHASES[pi].stages[si].steps[step].mii = r;
+    } else {
+      sel.value = PHASES[pi].stages[si].steps[step].mii || '';
+      return;
+    }
+  } else {
+    PHASES[pi].stages[si].steps[step].mii = sel.value || '';
+  }
+  renderPhases();
+  enableInlineEdit(true);
+}
+
+function renderPhases() {
+  const canvas = document.getElementById('canvas');
+  const tlBar = `
+    <div class="timeline-bar">
+      ${PHASES.map((p, i) => `
+        <div class="tl-phase" data-phase="${i}" onclick="if(!event.target.closest('.editable'))scrollToPhase(${i})">
+          <div class="tl-gate">${p.gate}</div>
+          <div class="tl-dur"><span class="editable" onblur="onPhaseFieldBlur(this,${i},'dur')" spellcheck="false">${escapeHTML(p.dur)}</span></div>
+          <div class="tl-title"><span class="editable" onblur="onPhaseFieldBlur(this,${i},'name')" spellcheck="false">${escapeHTML(p.name)}</span></div>
+          <div class="tl-sub"><span class="editable" onblur="onPhaseFieldBlur(this,${i},'goal')" spellcheck="false">${escapeHTML(p.goal)}</span></div>
+        </div>
+      `).join('')}
+      <div class="tl-final-gate">✓</div>
+    </div>`;
+  const grid = `<div class="phases-grid">
+    ${PHASES.map((p, pi) => `
+      <div class="phase-col" id="phase-col-${pi}">
+        <div class="phase-head">
+          <div class="pc-gate">${p.gate}</div>
+          <div>
+            <div class="pc-title"><span class="editable" onblur="onPhaseFieldBlur(this,${pi},'name')" spellcheck="false">${escapeHTML(p.name)}</span></div>
+            <div class="pc-goal"><span class="editable" onblur="onPhaseFieldBlur(this,${pi},'goal')" spellcheck="false">${escapeHTML(p.goal)}</span></div>
+          </div>
+        </div>
+        ${p.stages.map((s, si) => stageHTML(s, pi, si)).join('')}
+      </div>
+    `).join('')}
+  </div>`;
+  canvas.innerHTML = tlBar + grid;
+}
+
+function toggleStage(id) { document.getElementById(id).classList.toggle('open'); }
+function expandAll(open) { document.querySelectorAll('.stage').forEach(el => el.classList.toggle('open', open)); }
+function scrollToPhase(i) {
+  const col = document.getElementById('phase-col-' + i);
+  if (!col) return;
+  document.querySelectorAll('.tl-phase').forEach(el => el.classList.remove('active'));
+  document.querySelector(`.tl-phase[data-phase="${i}"]`).classList.add('active');
+  const rect = col.getBoundingClientRect();
+  const canvasRect = document.getElementById('canvas').getBoundingClientRect();
+  const offsetX = rect.left - canvasRect.left;
+  tx = -offsetX * scale + 40;
+  applyTransform();
+}
+
+/* =========================
+   SOP modal + panel
+   ========================= */
+function openSop(id) {
+  const s = SOPS.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('modalTitle').textContent = `${s.id} · ${s.name}`;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="m-meta"><span>Category:</span> ${s.cat}</div>
+    <div class="m-meta"><span>Code:</span> ${s.id}</div>
+    <div class="placeholder">📄 SOP content placeholder. Attach the full document for <strong>${s.name}</strong> here. When provided, it will render as scrollable content (PDF link, embedded text, or step-by-step list).</div>
+    <div class="m-meta" style="margin-top:14px;"><span>Suggested sections:</span> Purpose · Scope · Definitions · Roles & RACI · Process steps · Records / formats · References · Revision history</div>
+  `;
+  document.getElementById('modalBg').classList.add('open');
+}
+function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
+function toggleSopPanel() { document.getElementById('sopPanel').classList.toggle('open'); }
+function renderSopPanel() {
+  const byCat = {};
+  SOPS.forEach(s => { byCat[s.cat] = byCat[s.cat] || []; byCat[s.cat].push(s); });
+  const html = Object.keys(byCat).map(cat => `
+    <div class="sop-cat">
+      <h4>${cat}</h4>
+      ${byCat[cat].map(s => `
+        <div class="sop-item" onclick="openSop('${s.id}')">
+          <span>${s.name}</span><span class="tag">${s.id}</span>
+        </div>`).join('')}
+    </div>`).join('');
+  document.getElementById('sopList').innerHTML = html;
+}
+
+/* =========================
+   FLOW SEARCH + ZOOM/PAN
+   ========================= */
+document.getElementById('flowSearch').addEventListener('input', (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  document.querySelectorAll('.stage').forEach(el => {
+    if (!q) { el.style.opacity = 1; el.style.filter = 'none'; return; }
+    const match = el.dataset.search.includes(q);
+    el.style.opacity = match ? 1 : 0.18;
+    el.style.filter = match ? 'none' : 'grayscale(0.6)';
+    if (match) el.classList.add('open');
+  });
+});
+
+const viewport = document.getElementById('viewport');
+const canvasEl = document.getElementById('canvas');
+let scale = 1, tx = 0, ty = 0;
+let isPanning = false, panStart = {x:0,y:0}, startTx=0, startTy=0;
+function applyTransform() { canvasEl.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`; }
+function zoomBy(factor, cx, cy) {
+  const vr = viewport.getBoundingClientRect();
+  cx = cx ?? vr.width/2; cy = cy ?? vr.height/2;
+  const newScale = Math.max(0.3, Math.min(2.5, scale * factor));
+  const sx = (cx - tx) / scale;
+  const sy = (cy - ty) / scale;
+  scale = newScale;
+  tx = cx - sx * scale;
+  ty = cy - sy * scale;
+  applyTransform();
+}
+function resetZoom() { scale = 1; tx = 0; ty = 0; applyTransform(); }
+function fitView() {
+  const vr = viewport.getBoundingClientRect();
+  const rawW = canvasEl.scrollWidth, rawH = canvasEl.scrollHeight;
+  if (!rawW || !rawH) return;
+  const s = Math.min(vr.width / rawW, vr.height / rawH) * 0.95;
+  scale = Math.max(0.3, Math.min(2.5, s));
+  tx = Math.max(20, (vr.width - rawW*scale)/2);
+  ty = 20;
+  applyTransform();
+}
+viewport.addEventListener('wheel', (e) => {
+  if (e.ctrlKey || e.metaKey) {
+    e.preventDefault();
+    const rect = viewport.getBoundingClientRect();
+    const factor = e.deltaY < 0 ? 1.12 : 1/1.12;
+    zoomBy(factor, e.clientX - rect.left, e.clientY - rect.top);
+  } else {
+    e.preventDefault();
+    tx -= e.deltaX; ty -= e.deltaY; applyTransform();
+  }
+}, { passive: false });
+viewport.addEventListener('mousedown', (e) => {
+  if (e.target.closest('.stage, .btn, .search, .sop-panel, .modal-bg, .chip, .tl-phase')) return;
+  isPanning = true; viewport.classList.add('grabbing');
+  panStart = {x: e.clientX, y: e.clientY}; startTx = tx; startTy = ty;
+});
+window.addEventListener('mousemove', (e) => {
+  if (!isPanning) return;
+  tx = startTx + (e.clientX - panStart.x); ty = startTy + (e.clientY - panStart.y);
+  applyTransform();
+});
+window.addEventListener('mouseup', () => { isPanning = false; viewport.classList.remove('grabbing'); });
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closeModal(); }
+  if (e.key === '0' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); resetZoom(); }
+  if (e.key === 'f' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); fitView(); }
+});
+
+/* =========================
+   KPI TREE — Visual, category-based flow diagram
+   Input → Enabler → Leading → Lagging with clear visual flow
+   ========================= */
+const KPI_OWNERS = {
+  'mii': { label: 'MII Lead', cls: 'owner-mii' },
+  'pp-lead': { label: 'Production & Planning Lead', cls: 'owner-pp-lead' },
+  'pp-assoc': { label: 'Project & Planning Associate', cls: 'owner-pp-assoc' },
+  'p-lead': { label: 'Process Lead', cls: 'owner-p-lead' },
+  'p-engg': { label: 'Process Engineer', cls: 'owner-p-engg' },
+  'sc': { label: 'Supply Chain Manager', cls: 'owner-sc' },
+  'fin': { label: 'Finance Associate', cls: 'owner-fin' },
+};
+
+const KPI_CATEGORIES = [
+  {
+    name: 'Quality System', icon: 'Q', color: '#8a4a00',
+    rows: [
+      { input:'SOPs per product × process', enabler:'SOP library with audit trail', leading:'SOP adherence audit score', lagging:'Field failure rate (MII-attrib.)', dir:'up', owner:'p-lead' },
+      { input:'PFMEA per SKU', enabler:'Live PFMEA + CAPA tracker', leading:'PFMEA actions closed %', lagging:'Warranty cost / unit', dir:'up', owner:'p-lead' },
+      { input:'IQC plan per SKD kit', enabler:'IQC checklist per SKU', leading:'IQC pass rate', lagging:'SKD rejection cost', dir:'up', owner:'p-engg' },
+      { input:'OQC plan per finished SKU', enabler:'OQC sampling plan', leading:'OQC pass rate', lagging:'FPY → Field failure rate', dir:'up', owner:'p-engg' },
+      { input:'Work Instructions per station', enabler:'Station-level WIs (current version)', leading:'WI compliance audit score', lagging:'Line defect rate', dir:'up', owner:'p-engg' },
+      { input:'PDI checklists per SKU', enabler:'PDI checklist library', leading:'PDI execution %', lagging:'Field failure rate', dir:'up', owner:'p-engg' },
+    ]
+  },
+  {
+    name: 'Production Discipline', icon: 'P', color: '#1a3fa8',
+    rows: [
+      { input:'Lot-based production plan', enabler:'Lot-wise tracker + gate sign-offs', leading:'Lot cycle-time adherence', lagging:'Daily output vs plan → OTP %', dir:'up', owner:'pp-lead' },
+      { input:'BOM / ECN management', enabler:'System of record + change log', leading:'BOM readiness at T-0', lagging:'Line downtime → OTP %', dir:'up', owner:'pp-assoc' },
+      { input:'Tool / mould maintenance plan', enabler:'PM schedule per mfr', leading:'Maintenance compliance %', lagging:'Line breakdowns → OTP %', dir:'up', owner:'p-lead' },
+      { input:'Operator training + certification', enabler:'Certification log per station', leading:'Certified operator %', lagging:'Line defect rate → FPY', dir:'up', owner:'p-engg' },
+      { input:'Line balancing / capacity plan', enabler:'Line layout + takt target', leading:'Capacity utilisation %', lagging:'OTP % + FG inventory days', dir:'up', owner:'pp-lead' },
+    ]
+  },
+  {
+    name: 'Supplier / Partner Governance', icon: 'S', color: '#5e2aa0',
+    rows: [
+      { input:'Vendor scorecard framework', enabler:'Monthly scorecard + QBR pack', leading:'Supplier audit score', lagging:'SKD kit rejection → cost per unit', dir:'up', owner:'mii' },
+      { input:'Manufacturer MSAs (India × China)', enabler:'Signed MSA + SLA', leading:'Contract compliance rate', lagging:'Disputes → cost + OTP', dir:'up', owner:'mii' },
+      { input:'QBR cadence with partner CEOs', enabler:'QBR calendar + pack', leading:'QBR action closure %', lagging:'CAPA live-on-line', dir:'up', owner:'mii' },
+      { input:'China SKD kit spec sheets', enabler:'Spec master per SKU', leading:'Spec compliance at IQC', lagging:'Rework cost → field failures', dir:'up', owner:'p-engg' },
+    ]
+  },
+  {
+    name: 'Feedback Loops — RCA & CAPA', icon: 'F', color: '#0a6b3f',
+    rows: [
+      { input:'Weekly market failure review', enabler:'Return feedback pipeline + taxonomy', leading:'RCA TAT', lagging:'Field failure rate', dir:'down', owner:'p-lead' },
+      { input:'Return / warranty data pipeline', enabler:'Service → MII data feed', leading:'MII-attrib. RCA completion %', lagging:'Warranty cost / unit', dir:'up', owner:'p-lead' },
+      { input:'Plant + supplier audit programme', enabler:'Audit calendar + owner', leading:'Audit findings closure %', lagging:'Process drift → quality', dir:'up', owner:'p-lead' },
+    ]
+  },
+  {
+    name: 'Cost & Finance', icon: '$', color: '#8a1a1a',
+    rows: [
+      { input:'Should-cost models per SKU', enabler:'Should-cost template + quarterly refresh', leading:'Cost variance vs should-cost', lagging:'NLC accuracy → CM2 %', dir:'down', owner:'mii' },
+      { input:'Negotiation playbook', enabler:'Playbook + supplier matrix', leading:'Negotiated savings %', lagging:'NLC reduction → CM2 %', dir:'up', owner:'mii' },
+      { input:'AP payment discipline', enabler:'Documented payment SOP', leading:'Vendor payment cycle TAT', lagging:'DPO days → WC days', dir:'down', owner:'fin' },
+    ]
+  },
+  {
+    name: 'Supply Chain & Logistics', icon: 'L', color: '#0a5f6b',
+    rows: [
+      { input:'Integrated prod + China supply calendar', enabler:'Single integrated calendar', leading:'SKD kit OTIF from China', lagging:'OTP %', dir:'up', owner:'sc' },
+      { input:'CFA coordination SOP', enabler:'Documented CFA SOP', leading:'CFA clearance TAT', lagging:'In-transit days → WC days', dir:'down', owner:'sc' },
+      { input:'Shipment documentation checklist', enabler:'Standardised doc checklist', leading:'Doc accuracy %', lagging:'Port delays → OTP %', dir:'up', owner:'sc' },
+    ]
+  },
+  {
+    name: 'Demand & Inventory', icon: 'D', color: '#7a4b0a',
+    rows: [
+      { input:'Demand planning framework', enabler:'Channel × SKU × season plan', leading:'Forecast accuracy (MAPE)', lagging:'Stock-outs + over-stock', dir:'up', owner:'pp-lead' },
+      { input:'Safety stock norms', enabler:'SKU × channel norms', leading:'Safety stock adherence', lagging:'Stock-out incidents', dir:'up', owner:'pp-assoc' },
+      { input:'Plan freeze windows', enabler:'Formalised freeze + exceptions log', leading:'Plan change incidents in freeze', lagging:'Line reschedule cost → OTP %', dir:'down', owner:'pp-lead' },
+    ]
+  },
+  {
+    name: 'Regulatory — BIS & Compliance', icon: 'R', color: '#c0392b',
+    rows: [
+      { input:'BIS certification tracker', enabler:'Weekly BIS status dashboard', leading:'BIS timeline adherence', lagging:'Sales continuity on MII SKUs', dir:'up', owner:'p-lead' },
+      { input:'Label / spec compliance checklist', enabler:'Standardised checklist', leading:'Label audit pass rate', lagging:'Regulatory holds → sales disruption', dir:'up', owner:'p-engg' },
+      { input:'Legal review SOP for new SKUs', enabler:'SOP + review log', leading:'Review TAT per SKU', lagging:'Launch delay → revenue risk', dir:'down', owner:'p-lead' },
+    ]
+  },
+];
+
+function renderKpiTree() {
+  const container = document.getElementById('kpiCategories');
+  const apply = () => {
+    const q = document.getElementById('kpiSearch').value.toLowerCase().trim();
+    const ownerFilter = document.getElementById('kpiOwnerFilter').value;
+    container.innerHTML = KPI_CATEGORIES.map((cat, idx) => {
+      const filtered = cat.rows.filter(r => {
+        if (ownerFilter && r.owner !== ownerFilter) return false;
+        if (q) {
+          const hay = (r.input+' '+r.enabler+' '+r.leading+' '+r.lagging+' '+KPI_OWNERS[r.owner].label+' '+cat.name).toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+      if (filtered.length === 0) return '';
+      const rows = filtered.map(r => {
+        const own = KPI_OWNERS[r.owner];
+        return `
+          <div class="kpi-flow-row">
+            <div class="kpi-flow">
+              <div class="kpi-cell input"><div class="cell-lbl">Input</div><div class="cell-txt">${r.input}</div></div>
+              <div class="kpi-cell enabler"><div class="cell-lbl">Enabler</div><div class="cell-txt">${r.enabler}</div></div>
+              <div class="kpi-cell leading"><div class="cell-lbl">Leading KPI</div><div class="cell-txt">${r.leading}</div></div>
+              <div class="kpi-cell lagging"><div class="cell-lbl">Lagging KPI</div><div class="cell-txt">${r.lagging}</div></div>
+            </div>
+            <div class="kpi-meta">
+              <span class="owner-pill ${own.cls}">👤 ${own.label}</span>
+              <span class="kpi-dir-badge ${r.dir}">${r.dir === 'up' ? '↑ Higher is better' : '↓ Lower is better'}</span>
+            </div>
+          </div>`;
+      }).join('');
+      const openCls = (q || ownerFilter) ? 'open' : (idx === 0 ? 'open' : '');
+      return `
+        <div class="kpi-cat-section ${openCls}">
+          <div class="kpi-cat-head" onclick="this.parentElement.classList.toggle('open')">
+            <div class="cat-icon" style="background: ${cat.color}">${cat.icon}</div>
+            <h3>${cat.name}</h3>
+            <span class="cat-count">${filtered.length} flow${filtered.length !== 1 ? 's' : ''}</span>
+            <span class="cat-arr">▾</span>
+          </div>
+          <div class="kpi-cat-body">${rows}</div>
+        </div>
+      `;
+    }).join('') || '<div style="text-align:center; color: var(--muted); padding: 40px; font-size: 13px;">No KPIs match the filters.</div>';
+  };
+  document.getElementById('kpiSearch').addEventListener('input', apply);
+  document.getElementById('kpiOwnerFilter').addEventListener('change', apply);
+  apply();
+}
+
+/* =========================
+   EDIT MODE — Edit / Save / Cancel
+   ========================= */
+const STORAGE_KEY = 'mii_dashboard_data_v1';
+let _editSnapshot = null;
+
+function enableInlineEdit(on) {
+  document.querySelectorAll('.editable').forEach(el => el.setAttribute('contenteditable', on ? 'true' : 'false'));
+  document.querySelectorAll('.edit-only').forEach(el => { el.style.display = on ? '' : 'none'; });
+  document.querySelectorAll('.role-select').forEach(el => { el.style.display = on ? 'inline-block' : 'none'; });
+  document.querySelectorAll('.hide-in-edit').forEach(el => { el.style.display = on ? 'none' : ''; });
+}
+
+function enterEditMode() {
+  _editSnapshot = JSON.stringify({ ROLE_KPIS, ORG, PHASES, CUSTOM_ROLES, COVER_FIELDS: saveCoverFields() });
+  document.body.classList.add('edit-mode');
+  document.getElementById('editBtn').style.display = 'none';
+  document.getElementById('saveBtn').style.display = 'inline-block';
+  document.getElementById('cancelBtn').style.display = 'inline-block';
+  document.getElementById('editBadge').style.display = 'inline-block';
+  enableInlineEdit(true);
+}
+function saveCoverFields() {
+  const fields = {};
+  document.querySelectorAll('[data-cover-key]').forEach(el => {
+    fields[el.dataset.coverKey] = el.innerHTML;
+  });
+  return fields;
+}
+function saveEdits() {
+  const COVER_FIELDS = saveCoverFields();
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ ROLE_KPIS, ORG, PHASES, CUSTOM_ROLES, COVER_FIELDS })); }
+  catch(e) { console.warn('Save failed', e); alert('Save failed: ' + e.message); return; }
+  exitEditMode();
+}
+function cancelEdits() {
+  if (_editSnapshot) {
+    try {
+      const snap = JSON.parse(_editSnapshot);
+      ROLE_KPIS = snap.ROLE_KPIS;
+      ORG = snap.ORG;
+      PHASES = snap.PHASES;
+      CUSTOM_ROLES = snap.CUSTOM_ROLES || [];
+      if (snap.COVER_FIELDS) applyCoverFields(snap.COVER_FIELDS);
+    } catch(e) { console.warn('Restore failed', e); }
+  }
+  exitEditMode();
+  renderOrg(currentOrgView);
+  renderPhases();
+}
+function exitEditMode() {
+  document.body.classList.remove('edit-mode');
+  document.getElementById('editBtn').style.display = 'inline-block';
+  document.getElementById('saveBtn').style.display = 'none';
+  document.getElementById('cancelBtn').style.display = 'none';
+  document.getElementById('editBadge').style.display = 'none';
+  enableInlineEdit(false);
+  _editSnapshot = null;
+}
+
+function applyCoverFields(fields) {
+  if (!fields) return;
+  Object.entries(fields).forEach(([key, val]) => {
+    const el = document.querySelector(`[data-cover-key="${key}"]`);
+    if (el) el.innerHTML = val;
+  });
+}
+function hydrateFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    if (saved.ROLE_KPIS) ROLE_KPIS = saved.ROLE_KPIS;
+    if (saved.ORG) ORG = saved.ORG;
+    if (saved.PHASES) PHASES = saved.PHASES;
+    if (saved.CUSTOM_ROLES) CUSTOM_ROLES = saved.CUSTOM_ROLES;
+    if (saved.COVER_FIELDS) applyCoverFields(saved.COVER_FIELDS);
+  } catch(e) { console.warn('Could not hydrate from storage', e); }
+}
+
+/* =========================
+   BOOT
+   ========================= */
+hydrateFromStorage();
+renderOrg('current');
+renderPhases();
+renderSopPanel();
+renderKpiTree();
+setTimeout(fitView, 80);
+</script>
+
+</body>
+</html>
