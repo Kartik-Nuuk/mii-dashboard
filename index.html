@@ -548,6 +548,8 @@
   .sop-item { padding: 8px 10px; margin: 4px 0; background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; font-size: 11.5px; cursor: pointer; display:flex; justify-content: space-between; align-items:center; transition: all .15s; }
   .sop-item:hover { border-color: var(--accent); }
   .sop-item .tag { font-size: 10px; color: var(--muted); }
+  .chip.sop-linked { background: var(--fn); border-color: var(--fn-bd); color: var(--fn-tx); font-weight: 600; }
+  .chip.sop-linked:hover { background: var(--accent-2); color: #fff; border-color: var(--accent-2); }
 
   /* =========================================================
      EDIT MODE
@@ -812,29 +814,29 @@ document.querySelectorAll('.tab').forEach(tab => {
    SOP LIBRARY
    ========================= */
 const SOPS = [
-  { id:'PKG-01', cat:'Packaging SOP (India)', name:'Packaging Material Development SOP' },
-  { id:'PKG-02', cat:'Packaging SOP (India)', name:'Packaging Validation & Drop Test SOP (ISTA)' },
+  { id:'PKG-01', cat:'Packaging SOP (India)', name:'Packaging Material Development SOP',           url:'sops/PKG-01_packaging_sop.docx',                    urlPdf:'sops/PKG-01_packaging_flowchart.pdf' },
+  { id:'PKG-02', cat:'Packaging SOP (India)', name:'Packaging Validation & Drop Test SOP (ISTA)',  url:'sops/PKG-02_packaging_validation_drop_test.docx' },
   { id:'PKG-03', cat:'Packaging SOP (China)', name:'SKD Packaging SOP' },
-  { id:'SC-01',  cat:'Supply Chain',          name:'Warehouse Handling & Storage SOP' },
+  { id:'SC-01',  cat:'Supply Chain',          name:'Warehouse Handling & Storage SOP',             url:'sops/SC-01_product_handling.docx' },
   { id:'SC-02',  cat:'Supply Chain',          name:'Dispatch & Logistics SOP' },
   { id:'SC-03',  cat:'Supply Chain',          name:'Inbound Logistics & CFA Coordination SOP' },
   { id:'VEN-01', cat:'Vendor Development & Sourcing', name:'Supplier Negotiation & Cost Finalization SOP' },
-  { id:'VEN-02', cat:'Vendor Development & Sourcing', name:'Supplier Performance Scorecard SOP' },
+  { id:'VEN-02', cat:'Vendor Development & Sourcing', name:'Supplier Performance Scorecard SOP',   url:'sops/VEN-02_manufacturer_scorecard.xlsx' },
   { id:'VEN-03', cat:'Vendor Development & Sourcing', name:'Supplier Audit SOP (Technical + Quality + Commercial)' },
   { id:'VEN-04', cat:'Vendor Development & Sourcing', name:'Approved Vendor List (AVL) Management SOP' },
   { id:'VEN-05', cat:'Vendor Development & Sourcing', name:'Vendor Identification, Comparison & Onboarding SOP' },
   { id:'PDP-01', cat:'Product Development',   name:'PDP Charter (Product Development Process) for MII' },
   { id:'PDP-02', cat:'Product Development',   name:'Design Freeze & Change Management SOP (ECN/ECR)' },
   { id:'PDP-03', cat:'Product Development',   name:'BOM Finalization & Costing SOP/Template' },
-  { id:'QA-01',  cat:'Quality & Testing',     name:'Incoming Quality Control (IQC) SOP' },
-  { id:'QA-02',  cat:'Quality & Testing',     name:'In-Process Quality Control (IPQC) SOP' },
-  { id:'QA-03',  cat:'Quality & Testing',     name:'Outgoing Quality Control (OQC) SOP' },
+  { id:'QA-01',  cat:'Quality & Testing',     name:'Incoming Quality Control (IQC) SOP',           url:'sops/QA-01_iqc_sop.docx' },
+  { id:'QA-02',  cat:'Quality & Testing',     name:'In-Process Quality Control (IPQC) SOP',        url:'sops/QA-02_03_ipqc_oqc_sop.docx' },
+  { id:'QA-03',  cat:'Quality & Testing',     name:'Outgoing Quality Control (OQC) SOP',           url:'sops/QA-02_03_ipqc_oqc_sop.docx' },
   { id:'QA-04',  cat:'Quality & Testing',     name:'Pre-Dispatch Inspection (PDI) SOP' },
-  { id:'QA-05',  cat:'Quality Defect Analysis', name:'Defect Analysis (RCA/CAPA) SOP' },
+  { id:'QA-05',  cat:'Quality Defect Analysis', name:'Defect Analysis (RCA/CAPA) SOP',             url:'sops/QA-05_defect_analysis_rca_capa.docx' },
   { id:'QA-06',  cat:'Quality Defect Analysis', name:'Field Failure & Warranty Return Feedback Loop SOP' },
   { id:'PPC-01', cat:'Production Planning & Manufacturing', name:'Production Planning & Control (PPC) SOP' },
   { id:'PPC-02', cat:'Production Planning & Manufacturing', name:'Material Requirement Planning (MRP) SOP' },
-  { id:'PPC-03', cat:'Production Planning & Manufacturing', name:'Work Instruction & Operator Training SOP' },
+  { id:'PPC-03', cat:'Production Planning & Manufacturing', name:'Work Instruction & Operator Training SOP', url:'sops/PPC-03_work_instructions_training.docx' },
   { id:'PPC-04', cat:'Production Planning & Manufacturing', name:'Lot Release & Dispatch Readiness SOP' },
   { id:'TOOL-01',cat:'Tooling & Development', name:'Tool Trial & Validation SOP (T0 / T1 / T2)' },
   { id:'TOOL-02',cat:'Tooling & Development', name:'Golden Sample Approval SOP' },
@@ -1483,7 +1485,10 @@ function sopChipsHTML(ids) {
     const s = SOPS.find(x => x.id === id);
     if (!s) return '';
     const short = s.name.length > 34 ? s.name.slice(0,32)+'…' : s.name;
-    return `<span class="chip sop" onclick="openSop('${id}'); event.stopPropagation();" title="${s.name}">${id} · ${short}</span>`;
+    const hasFile = s.url || s.urlPdf;
+    const indicator = hasFile ? ' ↗' : '';
+    const title = hasFile ? s.name + ' — click to open' : s.name + ' — document pending';
+    return `<span class="chip sop${hasFile ? ' sop-linked' : ''}" onclick="openSop('${id}'); event.stopPropagation();" title="${title}">${id} · ${short}${indicator}</span>`;
   }).join('')}</div>`;
 }
 
@@ -1636,12 +1641,23 @@ function scrollToPhase(i) {
 function openSop(id) {
   const s = SOPS.find(x => x.id === id);
   if (!s) return;
+  if (s.url && !s.urlPdf) {
+    window.open(s.url, '_blank');
+    return;
+  }
   document.getElementById('modalTitle').textContent = `${s.id} · ${s.name}`;
+  const fileLinks = s.url || s.urlPdf ? `
+    <div class="m-meta" style="margin-top:12px;"><span>Documents:</span></div>
+    <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+      ${s.urlPdf ? `<a href="${s.urlPdf}" target="_blank" class="btn primary" style="font-size:12px;">📄 View Flowchart (PDF)</a>` : ''}
+      ${s.url ? `<a href="${s.url}" target="_blank" class="btn" style="font-size:12px;">📝 Download Full SOP (.docx)</a>` : ''}
+    </div>` : `
+    <div class="placeholder">📄 Document not yet uploaded. Add the file for <strong>${s.name}</strong> to the SOP folder and re-deploy.</div>
+    <div class="m-meta" style="margin-top:14px;"><span>Suggested sections:</span> Purpose · Scope · Definitions · Roles & RACI · Process steps · Records / formats · References · Revision history</div>`;
   document.getElementById('modalBody').innerHTML = `
     <div class="m-meta"><span>Category:</span> ${s.cat}</div>
     <div class="m-meta"><span>Code:</span> ${s.id}</div>
-    <div class="placeholder">📄 SOP content placeholder. Attach the full document for <strong>${s.name}</strong> here. When provided, it will render as scrollable content (PDF link, embedded text, or step-by-step list).</div>
-    <div class="m-meta" style="margin-top:14px;"><span>Suggested sections:</span> Purpose · Scope · Definitions · Roles & RACI · Process steps · Records / formats · References · Revision history</div>
+    ${fileLinks}
   `;
   document.getElementById('modalBg').classList.add('open');
 }
@@ -1655,7 +1671,7 @@ function renderSopPanel() {
       <h4>${cat}</h4>
       ${byCat[cat].map(s => `
         <div class="sop-item" onclick="openSop('${s.id}')">
-          <span>${s.name}</span><span class="tag">${s.id}</span>
+          <span>${s.name}${(s.url||s.urlPdf) ? ' <span style="color:var(--accent-2);font-size:10px;font-weight:700;">↗ LINKED</span>' : ''}</span><span class="tag">${s.id}</span>
         </div>`).join('')}
     </div>`).join('');
   document.getElementById('sopList').innerHTML = html;
